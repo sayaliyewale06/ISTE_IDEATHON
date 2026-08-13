@@ -23,7 +23,7 @@ const LogsPage: React.FC = () => {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task/logs', {
+      const response = await fetch(`${API_BASE}/task/logs`, {
         method: 'GET',
         credentials: 'include',
       });

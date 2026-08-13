@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 
 interface Agent {
@@ -19,7 +20,7 @@ const AgentsPage: React.FC = () => {
 
   const fetchAgents = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task/agents', {
+      const response = await fetch(`${API_BASE}/task/agents`, {
         method: 'GET',
         credentials: 'include'
       });

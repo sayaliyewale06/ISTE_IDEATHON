@@ -38,7 +38,7 @@ const DatabaseInspectorPage: React.FC = () => {
 
   const fetchDBData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task/db-inspector', {
+      const response = await fetch(`${API_BASE}/task/db-inspector`, {
         method: 'GET',
         credentials: 'include',
       });

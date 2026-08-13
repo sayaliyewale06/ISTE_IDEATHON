@@ -24,7 +24,7 @@ const X402DemoPage: React.FC = () => {
 
   const fetchBalances = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/premium/balances');
+      const res = await fetch(`${API_BASE}/premium/balances`);
       if (res.ok) {
         const data = await res.json();
         setBalances(data);
@@ -50,7 +50,7 @@ const X402DemoPage: React.FC = () => {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:3001/api/premium/run-simulation', {
+      const res = await fetch(`${API_BASE}/premium/run-simulation`, { 
         method: 'POST',
       });
       const result = await res.json();

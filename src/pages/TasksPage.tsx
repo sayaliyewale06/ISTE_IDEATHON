@@ -39,7 +39,7 @@ const TasksPage: React.FC = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task', {
+      const response = await fetch(`${API_BASE}/task`, {
         method: 'GET',
         credentials: 'include'
       });

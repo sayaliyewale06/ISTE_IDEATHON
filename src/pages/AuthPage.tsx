@@ -54,7 +54,7 @@ const AuthPage: React.FC = () => {
         return;
       }
       try {
-        const response = await fetch('http://localhost:3001/api/auth/register', {
+        const response = await fetch(`${API_BASE}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const AuthPage: React.FC = () => {
       }
     } else {
       try {
-        const response = await fetch('http://localhost:3001/api/auth/login', {
+        const response = await fetch(`${API_BASE}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ const AuthPage: React.FC = () => {
     const mockName = 'Sayali';
     
     try {
-      let response = await fetch('http://localhost:3001/api/auth/login', {
+      let response = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ const AuthPage: React.FC = () => {
       
       if (!response.ok) {
         // Mock register the google user first
-        response = await fetch('http://localhost:3001/api/auth/register', {
+        response = await fetch(`${API_BASE}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

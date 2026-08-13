@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task/dashboard', {
+      const response = await fetch(`${API_BASE}/task/dashboard`, {
         method: 'GET',
         credentials: 'include'
       });

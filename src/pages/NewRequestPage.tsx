@@ -43,7 +43,7 @@ const NewRequestPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/task', {
+      const response = await fetch(`${API_BASE}/task`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

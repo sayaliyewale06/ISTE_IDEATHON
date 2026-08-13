@@ -25,7 +25,7 @@ const PaymentsPage: React.FC = () => {
 
   const fetchPayments = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/task/payments', {
+      const response = await fetch(`${API_BASE}/task/payments`, {
         method: 'GET',
         credentials: 'include'
       });
