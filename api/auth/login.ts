@@ -1,10 +1,8 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import fetch from 'node-fetch';
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   const url = `${process.env.BACKEND_URL ?? 'http://localhost:3001'}/api/auth/login`;
   try {
-    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: req.body, redirect: 'manual' });
+    const body = req.body && typeof req.body === 'object' ? JSON.stringify(req.body) : req.body;
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, redirect: 'manual' });
     const text = await r.text();
     res.status(r.status).send(text);
   } catch (err: any) {

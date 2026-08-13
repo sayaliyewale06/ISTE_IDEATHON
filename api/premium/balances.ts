@@ -1,7 +1,4 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import fetch from 'node-fetch';
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   const url = `${process.env.BACKEND_URL ?? 'http://localhost:3001'}/api/premium/balances`;
   try {
     const r = await fetch(url);

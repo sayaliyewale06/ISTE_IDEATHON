@@ -1,10 +1,7 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import fetch from 'node-fetch';
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   const url = `${process.env.BACKEND_URL ?? 'http://localhost:3001'}/api/task/logs`;
   try {
-    const r = await fetch(url, { method: 'GET', headers: { cookie: req.headers.cookie || '' } });
+    const r = await fetch(url, { method: 'GET', headers: { cookie: req.headers?.cookie || '' } });
     const json = await r.json();
     res.status(r.status).json(json);
   } catch (err: any) {
