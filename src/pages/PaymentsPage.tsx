@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 
 interface Transaction {
   txId: string;

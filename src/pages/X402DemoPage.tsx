@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 
 interface WalletData {

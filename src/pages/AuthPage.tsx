@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 import heroFriends from '../assets/hero-friends.png';
 
 const AuthPage: React.FC = () => {

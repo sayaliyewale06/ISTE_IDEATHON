@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 
 const suggestions = [
   'Plan a trip',
