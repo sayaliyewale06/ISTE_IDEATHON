@@ -92,19 +92,141 @@ const CoordinationPage: React.FC = () => {
   const fetchState = async () => {
     try {
       const res = await fetch(`${API_BASE}/coordination/state`);
-      const data = await res.json();
-      if (data.success) {
-        setAgents(data.agents || []);
-        setResources(data.resources || []);
-        setDependencyGraph(data.dependencyGraph || []);
-        setDeadlocks(data.deadlocks || []);
-        setLogs(data.logs || []);
-        setMode(data.mode);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setAgents(data.agents || []);
+          setResources(data.resources || []);
+          setDependencyGraph(data.dependencyGraph || []);
+          setDeadlocks(data.deadlocks || []);
+          setLogs(data.logs || []);
+          setMode(data.mode);
+          return;
+        }
       }
     } catch (err) {
-      console.error(err);
+      console.warn('Live backend unreachable, running client-side mesh state:', err);
     }
+
+    // Default peer mesh state for Vercel showcase
+    setAgents([
+      {
+        id: 'agent-triage',
+        name: 'Medical Triage AI',
+        role: 'Emergency Medical Coordinator',
+        priority: 1,
+        status: 'IDLE',
+        currentObjective: 'Allocate ICU beds and dispatch emergency ambulances for critical trauma cases',
+        heldResources: [],
+        negotiationRounds: 4,
+        reputation: 99.4
+      },
+      {
+        id: 'agent-bloodbank',
+        name: 'Blood Supply AI',
+        role: 'Hematology Reserve Broker',
+        priority: 2,
+        status: 'COMMITTED',
+        currentObjective: 'Secure refrigerated transport to transfer O-negative units across hospitals',
+        heldResources: [{ resourceId: 'res-blood', amount: 5, token: 'tok-bld-88' }],
+        negotiationRounds: 6,
+        reputation: 98.7
+      },
+      {
+        id: 'agent-logistics',
+        name: 'Disaster Logistics AI',
+        role: 'Relief Food & Oxygen Transport',
+        priority: 3,
+        status: 'IDLE',
+        currentObjective: 'Reserve vehicle capacity to route oxygen concentrators and relief supplies',
+        heldResources: [{ resourceId: 'res-transport', amount: 4, token: 'tok-log-12' }],
+        negotiationRounds: 2,
+        reputation: 97.5
+      },
+      {
+        id: 'agent-telemetry',
+        name: 'Grid Telemetry AI',
+        role: 'Sensor & Route Mesh Optimizer',
+        priority: 4,
+        status: 'COMMITTED',
+        currentObjective: 'Acquire high-bandwidth compute nodes to run traffic avoidance pathfinding',
+        heldResources: [{ resourceId: 'res-compute', amount: 8, token: 'tok-cmp-33' }],
+        negotiationRounds: 8,
+        reputation: 99.0
+      }
+    ]);
+
+    setResources([
+      {
+        id: 'res-transport',
+        name: 'Emergency Transport & Ambulances',
+        type: 'TRANSPORT',
+        totalCapacity: 10,
+        availableCapacity: 6,
+        reservedBy: [{ agentId: 'agent-logistics', amount: 4, token: 'tok-log-12' }],
+        protectedConstraint: 'Safety Rule: 2 ambulances strictly reserved for Code-Red Cardiac Triage',
+        minProtectedReserve: 2
+      },
+      {
+        id: 'res-icu',
+        name: 'ICU Trauma Beds',
+        type: 'ICU_BED',
+        totalCapacity: 8,
+        availableCapacity: 8,
+        reservedBy: [],
+        protectedConstraint: 'Safety Rule: 2 ICU beds locked for Pediatric/Disaster overflow',
+        minProtectedReserve: 2
+      },
+      {
+        id: 'res-blood',
+        name: 'O-Negative Blood Units',
+        type: 'BLOOD_SUPPLY',
+        totalCapacity: 15,
+        availableCapacity: 10,
+        reservedBy: [{ agentId: 'agent-bloodbank', amount: 5, token: 'tok-bld-88' }],
+        protectedConstraint: 'Safety Rule: 3 units reserved for acute surgical hemorrhage',
+        minProtectedReserve: 3
+      },
+      {
+        id: 'res-compute',
+        name: 'Telemetry Bandwidth & Compute Nodes',
+        type: 'COMPUTE',
+        totalCapacity: 20,
+        availableCapacity: 12,
+        reservedBy: [{ agentId: 'agent-telemetry', amount: 8, token: 'tok-cmp-33' }],
+        protectedConstraint: 'Safety Rule: 4 compute slots reserved for Dispatch Mesh Consensus',
+        minProtectedReserve: 4
+      }
+    ]);
+
+    setLogs([
+      {
+        id: 'log-1',
+        timestamp: '12:04:19.412',
+        protocol: 'DECENTRALIZED_P2P',
+        type: 'ALLOCATION_COMMITTED',
+        agentId: 'agent-bloodbank',
+        message: 'P2P Lease Confirmed: Blood Supply AI allocated 5 units of O-Negative Blood Units'
+      },
+      {
+        id: 'log-2',
+        timestamp: '11:58:34.120',
+        protocol: 'DECENTRALIZED_P2P',
+        type: 'PROPOSAL',
+        agentId: 'agent-logistics',
+        message: 'Disaster Logistics AI broadcast proposal for 4 units of Emergency Transport'
+      },
+      {
+        id: 'log-3',
+        timestamp: '11:42:06.840',
+        protocol: 'DECENTRALIZED_P2P',
+        type: 'CONSTRAINT_PROTECTED',
+        agentId: 'agent-triage',
+        message: 'SAFETY CONSTRAINT ENFORCED: 2 units preserved for Pediatric/Disaster overflow.'
+      }
+    ]);
   };
+
 
 
   const fetchBenchmark = async () => {
