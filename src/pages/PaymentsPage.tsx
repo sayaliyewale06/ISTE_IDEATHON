@@ -42,45 +42,43 @@ const PaymentsPage: React.FC = () => {
 
     setTransactions([
       {
-        id: 'tx_981240a1',
-        agentName: 'Medical Triage AI',
-        agentIcon: '🚑',
-        taskGoal: 'Allocate 4 ambulances and 3 ICU beds for Pune Disaster Center',
-        amount: 3.50,
-        status: 'SETTLED',
-        time: 'Just now',
         txId: 'TXID_4F0D944E64F92EAAB586FD0E',
-        payerAddress: 'ALGO_ROUTER_MAIN_W9812A4789X012',
-        agentAddress: 'ALGO_TRIAGE_W4812A4789X012'
+        taskId: 'task_e4892c90',
+        agent: 'Medical Triage AI',
+        agentWallet: 'ALGO_TRIAGE_W4812A4789X012',
+        amount: '3.50',
+        currency: 'USDC',
+        nonce: 'nonce_981240a1',
+        status: 'SETTLED',
+        timestamp: 'Just now'
       },
       {
-        id: 'tx_7821943c',
-        agentName: 'Blood Bank AI',
-        agentIcon: '🩸',
-        taskGoal: 'Reserve 5 units of O-negative blood with cold-chain tracking',
-        amount: 2.00,
-        status: 'SETTLED',
-        time: '12 mins ago',
         txId: 'TXID_7821943CB586FD0E4F0D944E',
-        payerAddress: 'ALGO_ROUTER_MAIN_W9812A4789X012',
-        agentAddress: 'ALGO_BLOOD_W1023B4789X013'
+        taskId: 'task_e4892c90',
+        agent: 'Blood Bank AI',
+        agentWallet: 'ALGO_BLOOD_W1023B4789X013',
+        amount: '2.00',
+        currency: 'USDC',
+        nonce: 'nonce_7821943c',
+        status: 'SETTLED',
+        timestamp: '12 mins ago'
       },
       {
-        id: 'tx_331e987f',
-        agentName: 'Disaster Logistics AI',
-        agentIcon: '📦',
-        taskGoal: 'Oxygen concentrator convoy transport reservation',
-        amount: 3.00,
-        status: 'SETTLED',
-        time: '28 mins ago',
         txId: 'TXID_331E987F4F0D944E64F92EAA',
-        payerAddress: 'ALGO_ROUTER_MAIN_W9812A4789X012',
-        agentAddress: 'ALGO_LOGIS_W9312C4789X014'
+        taskId: 'task_b1088491',
+        agent: 'Disaster Logistics AI',
+        agentWallet: 'ALGO_LOGIS_W9312C4789X014',
+        amount: '3.00',
+        currency: 'USDC',
+        nonce: 'nonce_331e987f',
+        status: 'SETTLED',
+        timestamp: '28 mins ago'
       }
     ]);
     setError('');
     setLoading(false);
   };
+
 
 
   useEffect(() => {

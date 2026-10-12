@@ -59,15 +59,16 @@ const DatabaseInspectorPage: React.FC = () => {
       { id: 'usr-1', name: 'Demo Operator', email: 'demo@algoverse.ai', balance: 100.0, createdAt: '2026-10-12' }
     ]);
     setTasks([
-      { id: 'task-1', userId: 'usr-1', goal: 'Emergency ICU & transport coordination', status: 'SUCCESS', createdAt: '2026-10-12', completedAt: '2026-10-12' },
-      { id: 'task-2', userId: 'usr-1', goal: 'O-Negative blood allocation', status: 'SUCCESS', createdAt: '2026-10-12', completedAt: '2026-10-12' }
+      { id: 'task-1', userId: 'usr-1', goal: 'Emergency ICU & transport coordination', status: 'SUCCESS', createdAt: '2026-10-12' },
+      { id: 'task-2', userId: 'usr-1', goal: 'O-Negative blood allocation', status: 'SUCCESS', createdAt: '2026-10-12' }
     ]);
     setEscrows([
-      { id: 'esc-1', taskId: 'task-1', appId: '61298349', amount: 8.50, status: 'RELEASED', createdAt: '2026-10-12' }
+      { id: 'esc-1', taskId: 'task-1', appId: '61298349', boxKey: 'box_6129', amount: 8.50, status: 'RELEASED', txidFund: 'tx_fund_6129', createdAt: '2026-10-12' }
     ]);
     setError('');
     setLoading(false);
   };
+
 
 
   useEffect(() => {

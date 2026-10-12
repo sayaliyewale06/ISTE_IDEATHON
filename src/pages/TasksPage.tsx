@@ -58,44 +58,51 @@ const TasksPage: React.FC = () => {
       {
         id: 'task_e4892c90-410a',
         goal: 'Coordinate 4 trauma ambulances and 3 ICU beds for Pune Disaster Center while reserving 5 units of O-negative blood.',
+        userId: 'usr-1',
         status: 'SUCCESS',
         createdAt: 'Just now',
-        completedAt: 'Just now',
-        escrows: [{ appId: '61298349', amount: 8.50, status: 'RELEASED' }],
-        transactions: [
-          { agentName: 'Medical Triage AI', amount: 3.50, status: 'PAID' },
-          { agentName: 'Blood Bank AI', amount: 2.00, status: 'PAID' },
-          { agentName: 'Disaster Logistics AI', amount: 3.00, status: 'PAID' }
+        totalCost: '8.50',
+        currency: 'USDC',
+        executionTime: '1.2s',
+        agents: [
+          { name: 'Medical Triage AI', icon: '🚑', price: '3.50', status: 'COMPLETED', latency: '28ms' },
+          { name: 'Blood Bank AI', icon: '🩸', price: '2.00', status: 'COMPLETED', latency: '31ms' },
+          { name: 'Disaster Logistics AI', icon: '📦', price: '3.00', status: 'COMPLETED', latency: '42ms' }
         ]
       },
       {
         id: 'task_b1088491-987f',
         goal: 'Dispatch oxygen concentrator convoy to West Sector Hospital and run telemetry route optimization.',
+        userId: 'usr-1',
         status: 'SUCCESS',
         createdAt: '12 mins ago',
-        completedAt: '10 mins ago',
-        escrows: [{ appId: '74120983', amount: 5.00, status: 'RELEASED' }],
-        transactions: [
-          { agentName: 'Disaster Logistics AI', amount: 3.50, status: 'PAID' },
-          { agentName: 'Grid Telemetry AI', amount: 1.50, status: 'PAID' }
+        totalCost: '5.00',
+        currency: 'USDC',
+        executionTime: '0.9s',
+        agents: [
+          { name: 'Disaster Logistics AI', icon: '📦', price: '3.50', status: 'COMPLETED', latency: '42ms' },
+          { name: 'Grid Telemetry AI', icon: '📡', price: '1.50', status: 'COMPLETED', latency: '15ms' }
         ]
       },
       {
         id: 'task_c7821943-331e',
         goal: 'Contention simulation: circular wait between Triage AI and Logistics AI resolved via Priority Preemption.',
+        userId: 'usr-1',
         status: 'ROLLED_BACK',
         createdAt: '35 mins ago',
-        completedAt: '34 mins ago',
-        escrows: [{ appId: '88219401', amount: 6.00, status: 'REFUNDED' }],
-        transactions: [
-          { agentName: 'Medical Triage AI', amount: 3.00, status: 'REFUNDED' },
-          { agentName: 'Disaster Logistics AI', amount: 3.00, status: 'REFUNDED' }
+        totalCost: '6.00',
+        currency: 'USDC',
+        executionTime: '2.4s',
+        agents: [
+          { name: 'Medical Triage AI', icon: '🚑', price: '3.00', status: 'ROLLED_BACK', latency: '28ms' },
+          { name: 'Disaster Logistics AI', icon: '📦', price: '3.00', status: 'ROLLED_BACK', latency: '42ms' }
         ]
       }
     ]);
     setError('');
     setLoading(false);
   };
+
 
 
   useEffect(() => {
