@@ -11,9 +11,10 @@ import {
   FileText, 
   Settings,
   Sparkles,
-  X,
-  AlertCircle
+  X
 } from 'lucide-react';
+
+
 
 interface NavItem {
   label: string;
@@ -35,8 +36,18 @@ const navItems: NavItem[] = [
     iconBg: 'bg-blue-100 text-blue-600'
   },
   { 
+    label: 'P2P Coordination', 
+    path: '/dashboard/coordination', 
+    icon: <Sparkles className="w-4 h-4" />, 
+    badge: 'NEW PS',
+    hoverClass: 'hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 hover:text-indigo-600 hover:border-l-4 hover:border-indigo-500',
+    activeClass: 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25 font-bold',
+    iconBg: 'bg-indigo-100 text-indigo-600'
+  },
+  { 
     label: 'New Request', 
     path: '/dashboard/new-request', 
+
     icon: <PlusCircle className="w-4 h-4" />, 
     badge: 'HOT',
     hoverClass: 'hover:bg-gradient-to-r hover:from-purple-50 hover:to-fuchsia-50 hover:text-purple-600 hover:border-l-4 hover:border-purple-500',
@@ -44,17 +55,9 @@ const navItems: NavItem[] = [
     iconBg: 'bg-purple-100 text-purple-600'
   },
   { 
-    label: 'Emergency Response', 
-    path: '/dashboard/emergency', 
-    icon: <AlertCircle className="w-4 h-4" />, 
-    badge: 'NEW',
-    hoverClass: 'hover:bg-gradient-to-r hover:from-red-50 hover:to-orange-50 hover:text-red-600 hover:border-l-4 hover:border-red-500',
-    activeClass: 'bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-md shadow-red-500/25 font-bold',
-    iconBg: 'bg-red-100 text-red-600'
-  },
-  { 
     label: 'Agents', 
     path: '/dashboard/agents', 
+
     icon: <Bot className="w-4 h-4" />, 
     badge: '25',
     hoverClass: 'hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:text-emerald-600 hover:border-l-4 hover:border-emerald-500',
@@ -98,14 +101,6 @@ const navItems: NavItem[] = [
     iconBg: 'bg-indigo-100 text-indigo-600'
   },
   { 
-    label: 'x402 Sandbox', 
-    path: '/dashboard/x402-sandbox', 
-    icon: <Sparkles className="w-4 h-4" />, 
-    hoverClass: 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:border-l-4 hover:border-blue-500',
-    activeClass: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 font-bold',
-    iconBg: 'bg-blue-100 text-blue-600'
-  },
-  { 
     label: 'Settings', 
     path: '/dashboard/settings', 
     icon: <Settings className="w-4 h-4" />, 
@@ -114,6 +109,7 @@ const navItems: NavItem[] = [
     iconBg: 'bg-slate-200 text-slate-700'
   },
 ];
+
 
 interface SidebarProps {
   isOpen: boolean;
@@ -148,9 +144,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <TravelLogoIcon className="w-10 h-10" size={40} />
             </div>
             <div>
-              <div className="text-[18px] font-bold text-navy leading-tight tracking-tight group-hover:text-blue-brand transition-colors">Wanderly</div>
-              <div className="text-[11px] text-slate-500 font-medium tracking-wide">AI Router Network</div>
+              <div className="text-[17px] font-extrabold text-navy leading-tight tracking-tight group-hover:text-indigo-600 transition-colors">AlgoVerse</div>
+              <div className="text-[10.5px] text-indigo-600 font-semibold tracking-wide">Multi-Agent P2P Mesh</div>
             </div>
+
           </Link>
           
           {/* Close button - mobile only */}
@@ -205,26 +202,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             );
           })}
         </nav>
-
-        {/* Bottom Upgrade Card */}
-        <div className="mt-auto px-1 pt-4">
-          <div className="bg-gradient-to-br from-blue-50 via-sky/60 to-indigo-50 rounded-[18px] p-4 text-center border border-blue-100/80 shadow-xs relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-blue-400/10 rounded-full blur-xl pointer-events-none"></div>
-            <div className="w-9 h-9 mx-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full flex items-center justify-center mb-2 shadow-xs group-hover:scale-110 transition-transform">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div className="text-[13px] font-bold text-navy">Upgrade to Pro</div>
-            <div className="text-[11px] text-slate-500 mt-0.5 mb-3">Get advanced analytics & router APIs</div>
-            <button 
-              onClick={() => alert('Upgrade to Wanderly Pro — Custom AI Router Models & Dedicated Algorand Escrow Nodes')}
-              className="w-full py-2 bg-white hover:bg-blue-brand hover:text-white text-blue-brand font-bold text-xs rounded-full shadow-xs transition-all duration-200 cursor-pointer"
-            >
-              View Plans
-            </button>
-          </div>
-        </div>
       </aside>
     </>
+
   );
 };
 

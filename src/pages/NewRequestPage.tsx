@@ -6,24 +6,24 @@ import { useAuth } from '../context/AuthContext';
 import { API_BASE } from '../config';
 
 const suggestions = [
-  'Plan a trip',
-  'Book a hotel',
-  'Compare flights',
-  'Budget planning',
-  'Travel itinerary',
-  'Restaurant suggestions',
+  'Emergency ICU & ambulance triage',
+  'Inter-hospital O- blood logistics',
+  'Oxygen concentrator convoy routing',
+  'Disaster relief food & shelter supply',
+  'High-bandwidth telemetry mesh compute',
+  'Critical trauma resource reservation',
 ];
 
 const agents = [
-  { name: 'Flight AI', icon: '✈', desc: 'Finds and books optimal flight routes.' },
-  { name: 'Hotel AI', icon: '🛏', desc: 'Searches and reserves accommodations.' },
-  { name: 'Weather AI', icon: '☀', desc: 'Provides real-time weather forecasts.' },
-  { name: 'Maps AI', icon: '🗺', desc: 'Calculates routes and distances.' },
-  { name: 'Finance AI', icon: '💳', desc: 'Handles budgets and secure payments.' },
+  { name: 'Medical Triage AI', icon: '🚑', desc: 'Prioritizes critical trauma cases & ICU transfers.' },
+  { name: 'Blood Bank AI', icon: '🩸', desc: 'Brokers O-negative blood reserves across hubs.' },
+  { name: 'Disaster Logistics AI', icon: '📦', desc: 'Routes oxygen and relief convoys peer-to-peer.' },
+  { name: 'Grid Telemetry AI', icon: '📡', desc: 'Computes real-time congestion-avoidance paths.' },
+  { name: 'Escrow Settlement AI', icon: '💳', desc: 'Manages decentralized resource leases & deposits.' },
 ];
 
 const NewRequestPage: React.FC = () => {
-  const [budget, setBudget] = useState(55000);
+  const [budget, setBudget] = useState(50);
   const [goal, setGoal] = useState('');
   const [loading, setLoading] = useState(false);
   const [simulationOutcome, setSimulationOutcome] = useState<'SUCCESS' | 'ROLLED_BACK'>('SUCCESS');
@@ -33,7 +33,7 @@ const NewRequestPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSuggestionClick = (s: string) => {
-    setGoal(prev => prev ? `${prev} and ${s.toLowerCase()}` : `I want to ${s.toLowerCase()}`);
+    setGoal(prev => prev ? `${prev} and ${s.toLowerCase()}` : `Dispatch autonomous coordination for ${s.toLowerCase()}`);
   };
 
   const handleCreateRequest = async () => {
@@ -85,9 +85,9 @@ const NewRequestPage: React.FC = () => {
         
         {/* Page Header */}
         <div className="mb-8">
-          <h1 className="text-[24px] md:text-[32px] font-bold font-display text-navy leading-tight">Create New Request</h1>
+          <h1 className="text-[24px] md:text-[32px] font-bold font-display text-navy leading-tight">Dispatch Coordinated Task</h1>
           <p className="text-[14px] md:text-[15px] text-slate-500 mt-1">
-            Describe what you need and AI Router will automatically coordinate the best AI agents to complete your request.
+            Specify an objective and autonomous agents will negotiate shared resources and execute without central bottlenecks.
           </p>
         </div>
 
@@ -98,21 +98,20 @@ const NewRequestPage: React.FC = () => {
             
             {/* 1. Request Description */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">1. Request Description</h3>
-
+              <h3 className="text-[16px] font-bold text-navy mb-4">1. Objective Description</h3>
 
               <textarea
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                className="w-full h-[140px] bg-slate-50 border border-line rounded-[16px] p-5 text-[14px] text-ink focus:outline-none focus:border-blue-brand focus:bg-white transition-colors resize-none placeholder-slate-400"
-                placeholder={'Example:\nPlan a 5-day trip to Japan under ₹80,000 including flights, hotels, local transport, restaurants and weather updates.'}
+                className="w-full h-[140px] bg-slate-50 border border-line rounded-[16px] p-5 text-[14px] text-ink focus:outline-none focus:border-indigo-600 focus:bg-white transition-colors resize-none placeholder-slate-400"
+                placeholder={'Example:\nCoordinate 4 trauma ambulances and 3 ICU beds for Pune Disaster Center while reserving 5 units of O-negative blood.'}
               ></textarea>
               <div className="flex flex-wrap gap-2 mt-4">
                 {suggestions.map(s => (
                   <span 
                     key={s} 
                     onClick={() => handleSuggestionClick(s)}
-                    className="px-3 py-1.5 bg-sky text-blue-brand text-[12px] font-medium rounded-full cursor-pointer hover:bg-blue-brand hover:text-white transition-colors border border-transparent"
+                    className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-[12px] font-medium rounded-full cursor-pointer hover:bg-indigo-600 hover:text-white transition-colors border border-transparent"
                   >
                     {s}
                   </span>
@@ -120,26 +119,24 @@ const NewRequestPage: React.FC = () => {
               </div>
             </div>
 
-
             {/* 2. Execution Mode */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">2. Execution Mode</h3>
+              <h3 className="text-[16px] font-bold text-navy mb-4">2. Coordination Protocol</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
-                <div className="border-[2px] border-blue-brand bg-sky/30 rounded-[16px] p-5 cursor-pointer relative">
-                  <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-blue-brand flex items-center justify-center text-white">
+                <div className="border-[2px] border-indigo-600 bg-indigo-50/40 rounded-[16px] p-5 cursor-pointer relative">
+                  <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                   </div>
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Smart Routing <span className="text-[11px] font-semibold text-blue-brand bg-sky px-2 py-0.5 rounded-full ml-1">Recommended</span></h4>
-                  <p className="text-[12.5px] text-slate-500">Automatically selects the best AI agents.</p>
+                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">P2P Decentralized <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full ml-1">Proposed</span></h4>
+                  <p className="text-[12.5px] text-slate-500">Autonomous peer negotiation with edge-chasing deadlock prevention.</p>
                 </div>
                 
                 <div className="border border-line bg-white rounded-[16px] p-5 cursor-pointer hover:border-slate-300 transition-colors">
-                  <div className="absolute top-4 right-4 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center"></div>
-                  <h4 className="text-[14px] font-bold text-navy mb-1">Manual Selection</h4>
-                  <p className="text-[12.5px] text-slate-500">Choose agents yourself.</p>
+                  <h4 className="text-[14px] font-bold text-navy mb-1">Centralized Baseline</h4>
+                  <p className="text-[12.5px] text-slate-500">Traditional single-router sequential queue baseline.</p>
                 </div>
               </div>
             </div>
@@ -147,70 +144,70 @@ const NewRequestPage: React.FC = () => {
             {/* 3. Budget */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-[16px] font-bold text-navy">3. Budget</h3>
-                <div className="text-[18px] font-display font-bold text-blue-brand">
-                  ₹{budget.toLocaleString()}
+                <h3 className="text-[16px] font-bold text-navy">3. Resource Allocation Credit Cap</h3>
+                <div className="text-[18px] font-display font-bold text-indigo-600">
+                  ${budget.toFixed(2)} USDC
                 </div>
               </div>
               
               <div className="relative pt-2 pb-6">
                 <input 
                   type="range" 
-                  min="10000" 
-                  max="100000" 
-                  step="1000"
+                  min="5" 
+                  max="100" 
+                  step="5"
                   value={budget}
                   onChange={(e) => setBudget(Number(e.target.value))}
-                  className="w-full h-1.5 bg-line rounded-full appearance-none cursor-pointer accent-blue-brand outline-none"
+                  className="w-full h-1.5 bg-line rounded-full appearance-none cursor-pointer accent-indigo-600 outline-none"
                 />
                 <div className="flex justify-between items-center mt-3 text-[12px] font-medium text-slate-400">
-                  <span>₹10K</span>
-                  <span>₹1L</span>
+                  <span>$5 USDC</span>
+                  <span>$100 USDC</span>
                 </div>
               </div>
             </div>
             
             {/* 4. Simulation Outcome */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">4. Simulation Outcome</h3>
+              <h3 className="text-[16px] font-bold text-navy mb-4">4. Fault & Resilience Verification</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 
                 <div 
                   onClick={() => setSimulationOutcome('SUCCESS')}
                   className={`border-[2px] rounded-[16px] p-5 cursor-pointer relative transition-all ${
                     simulationOutcome === 'SUCCESS' 
-                      ? 'border-blue-brand bg-sky/30' 
+                      ? 'border-indigo-600 bg-indigo-50/40' 
                       : 'border-line bg-white hover:border-slate-300'
                   }`}
                 >
                   {simulationOutcome === 'SUCCESS' && (
-                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-blue-brand flex items-center justify-center text-white">
+                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
                   )}
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Outcome A: Success</h4>
-                  <p className="text-[12.5px] text-slate-500">Simulate successful execution across all agents. Escrow is released.</p>
+                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Normal: Full Coordination</h4>
+                  <p className="text-[12.5px] text-slate-500">Autonomous peer bartering resolves shared resources safely.</p>
                 </div>
                 
                 <div 
                   onClick={() => setSimulationOutcome('ROLLED_BACK')}
                   className={`border-[2px] rounded-[16px] p-5 cursor-pointer relative transition-all ${
                     simulationOutcome === 'ROLLED_BACK' 
-                      ? 'border-blue-brand bg-sky/30' 
+                      ? 'border-indigo-600 bg-indigo-50/40' 
                       : 'border-line bg-white hover:border-slate-300'
                   }`}
                 >
                   {simulationOutcome === 'ROLLED_BACK' && (
-                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-blue-brand flex items-center justify-center text-white">
+                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
                   )}
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Outcome B: Rollback</h4>
-                  <p className="text-[12.5px] text-slate-500">Simulate sub-agent failure. Escrow triggers refund of all transactions.</p>
+                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Failure Injection: Auto-Rollback</h4>
+                  <p className="text-[12.5px] text-slate-500">Simulate peer failure. Atomic escrow auto-refunds all reserved credits.</p>
                 </div>
               </div>
             </div>
@@ -219,11 +216,10 @@ const NewRequestPage: React.FC = () => {
             <button 
               onClick={handleCreateRequest}
               disabled={loading}
-              className="w-full bg-blue-brand hover:bg-blue-dark text-white rounded-full py-4 text-[15px] font-bold transition-colors shadow-md mt-2 cursor-pointer disabled:opacity-50"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-full py-4 text-[15px] font-bold transition-colors shadow-md mt-2 cursor-pointer disabled:opacity-50"
             >
-              {loading ? 'Processing Atomic Request...' : 'Create Request'}
+              {loading ? 'Negotiating Peer Allocations...' : 'Launch Coordinated Task'}
             </button>
-
 
           </div>
 
@@ -232,18 +228,18 @@ const NewRequestPage: React.FC = () => {
             
             {/* Card 1: Selected AI Agents */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-5">Selected AI Agents</h3>
+              <h3 className="text-[16px] font-bold text-navy mb-5">Autonomous Agent Peers</h3>
               <div className="flex flex-col gap-4">
                 {agents.map((agent) => (
                   <div key={agent.name} className="flex items-start gap-3 border-b border-line pb-4 last:border-b-0 last:pb-0">
-                    <div className="w-9 h-9 rounded-full bg-sky flex items-center justify-center text-[16px] text-blue-brand shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-[16px] text-indigo-600 shrink-0">
                       {agent.icon}
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
                       <div className="flex justify-between items-start mb-1">
                         <div className="text-[14px] font-bold text-navy">{agent.name}</div>
-                        <span className="text-[10px] font-bold text-[#0E7D69] bg-[#E3FBF5] px-2 py-0.5 rounded-full uppercase tracking-wide">
-                          Available
+                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wide">
+                          Autonomous
                         </span>
                       </div>
                       <p className="text-[12px] text-slate-500 leading-snug">{agent.desc}</p>
@@ -252,6 +248,7 @@ const NewRequestPage: React.FC = () => {
                 ))}
               </div>
             </div>
+
 
             {/* Card 2: Request Summary */}
             <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">

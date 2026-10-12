@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
+    "@types/better-sqlite3": "^7.6.12",
     "@x402-avm/avm": "^2.6.1",
     "@x402-avm/core": "^2.6.1",
     "@x402-avm/hono": "^2.6.1",
@@ -25,7 +26,6 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
-    "@types/better-sqlite3": "^7.6.12",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.1",
     "drizzle-kit": "^0.30.4",

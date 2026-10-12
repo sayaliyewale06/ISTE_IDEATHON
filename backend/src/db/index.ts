@@ -14,7 +14,11 @@ const sqlite = new Database(dbPath);
 
 // Enable WAL mode for SQLite to improve concurrency (crucial for local testing)
 sqlite.pragma('journal_mode = WAL');
+sqlite.pragma('busy_timeout = 5000');
 
 export const db = drizzle(sqlite, { schema });
 export type DbClient = typeof db;
 export * as schema from './schema.js';
+
+
+

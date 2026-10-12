@@ -38,10 +38,14 @@ app.use('/api/*', cors({
 
 app.get('/', (c) => c.text('Atomic AI Router Backend is running!'));
 
-// Mount auth, tasks, and premium routes
+import { coordinationRouter } from './routes/coordination.js';
+
+// Mount auth, tasks, premium, and decentralized coordination routes
 app.route('/api/auth', auth);
 app.route('/api/task', tasksRouter);
 app.route('/api/premium', premiumRouter);
+app.route('/api/coordination', coordinationRouter);
+
 
 
 const port = parseInt(process.env.PORT || '3001');

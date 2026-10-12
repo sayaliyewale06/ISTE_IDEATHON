@@ -28,6 +28,7 @@ const DashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+
   const fetchDashboardData = async () => {
     try {
       const response = await fetch(`${API_BASE}/task/dashboard`, {
@@ -35,7 +36,11 @@ const DashboardPage: React.FC = () => {
         credentials: 'include'
       });
       if (!response.ok) {
-        throw new Error('Failed to load dashboard metrics.');
+        if (response.status === 401) {
+          // User session not established yet, silently wait for AuthContext to finish
+          return;
+        }
+        throw new Error(`Failed to load dashboard metrics (${response.status})`);
       }
       const result = await response.json();
       setData({
@@ -52,6 +57,7 @@ const DashboardPage: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchDashboardData();
@@ -82,6 +88,30 @@ const DashboardPage: React.FC = () => {
             {error}
           </div>
         )}
+
+        <div className="mb-8 p-5 bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-2xl text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                Problem Statement Focus
+              </span>
+              <span className="text-xs text-indigo-200 font-semibold">Domain: Agentic AI & Distributed Systems</span>
+            </div>
+            <h2 className="text-lg font-bold text-white tracking-tight">
+              Coordination Without Central Control: Autonomous Agent Resilience
+            </h2>
+            <p className="text-xs text-indigo-100/90 max-w-3xl">
+              Equipped with distributed negotiation, edge-chasing deadlock detection, fault injection test suites, and quantitative benchmark against centralized baselines.
+            </p>
+          </div>
+          <a
+            href="/dashboard/coordination"
+            className="px-5 py-2.5 bg-white text-indigo-900 hover:bg-indigo-50 font-bold text-xs rounded-xl shadow transition-all shrink-0 flex items-center gap-2"
+          >
+            Launch P2P Framework →
+          </a>
+        </div>
+
 
         {loading ? (
           <div className="bg-white rounded-[24px] border border-line p-12 text-center shadow-[0_4px_24px_rgba(15,27,61,0.02)]">

@@ -739,29 +739,60 @@ tasksRouter.get('/agents', async (c) => {
     const allAgents = await db.query.agents.findMany();
     const formattedAgents = allAgents.map(a => {
       let load = '45%';
-      let latency = '65ms';
-      if (a.name === 'Flight AI') { load = '68%'; latency = '38ms'; }
-      else if (a.name === 'Weather AI') { load = '12%'; latency = '28ms'; }
-      else if (a.name === 'Finance AI') { load = '92%'; latency = '125ms'; }
-      else if (a.name === 'Maps AI') { load = '34%'; latency = '35ms'; }
+      let latency = '35ms';
+      let icon = '🤖';
+      let desc = 'Autonomous agent peer with distributed negotiation capabilities.';
+      let tags = ['Autonomous Peer', 'P2P Gossip', 'Resource Broker'];
+
+      if (a.name === 'Flight AI' || a.name === 'Medical Triage AI') {
+        a.name = 'Medical Triage AI';
+        icon = '🚑';
+        desc = 'Coordinates emergency ICU admissions and high-priority trauma ambulance leases.';
+        tags = ['Critical Triage', 'P2P Priority', 'Emergency Mesh'];
+        load = '68%';
+        latency = '28ms';
+      } else if (a.name === 'Hotel AI' || a.name === 'Disaster Logistics AI') {
+        a.name = 'Disaster Logistics AI';
+        icon = '📦';
+        desc = 'Manages convoy transport, oxygen concentrators, and relief supply routes.';
+        tags = ['Convoys', 'Transport Quotas', 'Consensus'];
+        load = '54%';
+        latency = '42ms';
+      } else if (a.name === 'Weather AI' || a.name === 'Grid Telemetry AI') {
+        a.name = 'Grid Telemetry AI';
+        icon = '📡';
+        desc = 'Monitors distributed routing topology, sensor mesh, and communication health.';
+        tags = ['Heartbeat', 'Fault Detection', 'Topology'];
+        load = '22%';
+        latency = '15ms';
+      } else if (a.name === 'Finance AI' || a.name === 'Escrow Settlement AI') {
+        a.name = 'Escrow Settlement AI';
+        icon = '💳';
+        desc = 'Enforces atomic two-phase resource reservation locks and financial deposits.';
+        tags = ['Atomic Locks', 'Smart Escrow', 'Dispute Guard'];
+        load = '38%';
+        latency = '65ms';
+      } else if (a.name === 'Maps AI' || a.name === 'Blood Supply AI') {
+        a.name = 'Blood Supply AI';
+        icon = '🩸';
+        desc = 'Brokers scarce O-negative blood reserves across regional hospital hubs.';
+        tags = ['Cold-Chain', 'Inventory Mesh', 'Priority Barter'];
+        load = '48%';
+        latency = '31ms';
+      }
 
       return {
         name: a.name,
-        icon: a.name === 'Flight AI' ? '✈' : a.name === 'Weather AI' ? '☀' : a.name === 'Finance AI' ? '💳' : a.name === 'Maps AI' ? '🗺' : '🛏',
-        desc: a.name === 'Flight AI' ? 'Finds and books optimal flight routes.' :
-              a.name === 'Hotel AI' ? 'Searches and reserves accommodations.' :
-              a.name === 'Weather AI' ? 'Provides real-time weather forecasts.' :
-              a.name === 'Finance AI' ? 'Handles budgets and secure payments.' : 'Calculates routes and distances.',
+        icon,
+        desc,
         status: a.status === 'ACTIVE' ? 'Online' : 'Offline',
         load,
         latency,
         success: a.reputationScore.toFixed(1) + '%',
-        tags: a.name === 'Flight AI' ? ['Flight Search', 'Price Prediction', 'Booking'] :
-              a.name === 'Hotel AI' ? ['Hotel Search', 'Reviews', 'Booking'] :
-              a.name === 'Weather AI' ? ['Forecast', 'Alerts', 'Climate'] :
-              a.name === 'Finance AI' ? ['Budget', 'Currency', 'Optimization'] : ['Navigation', 'Traffic', 'Distance']
+        tags
       };
     });
+
 
     return c.json({ success: true, agents: formattedAgents });
   } catch (error: any) {
