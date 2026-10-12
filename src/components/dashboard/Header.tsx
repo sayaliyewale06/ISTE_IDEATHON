@@ -26,22 +26,22 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </button>
 
         {/* Search */}
-        <div className="flex-1 max-w-xs md:max-w-md">
+        <div className="flex-1 max-w-[160px] sm:max-w-xs md:max-w-md">
           <div className="relative flex items-center">
-            <svg className="w-4 h-4 absolute left-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 absolute left-3 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               type="text"
               placeholder="Search..."
-              className="w-full bg-slate-50 border border-line rounded-full py-2 pl-9 pr-4 text-[13px] text-ink focus:outline-none focus:border-blue-brand transition-colors"
+              className="w-full bg-slate-50 border border-line rounded-full py-1.5 sm:py-2 pl-9 pr-3 sm:pr-4 text-[12px] sm:text-[13px] text-ink focus:outline-none focus:border-blue-brand transition-colors"
             />
           </div>
         </div>
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-3 md:gap-5">
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-5">
 
         {/* Notifications */}
         <button className="relative w-9 h-9 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-500 transition-colors">

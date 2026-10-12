@@ -201,12 +201,12 @@ const PaymentsPage: React.FC = () => {
             </div>
 
             {/* Status Tabs */}
-            <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/80 rounded-[12px]">
+            <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/80 rounded-[12px] overflow-x-auto w-full sm:w-auto scrollbar-none">
               {['ALL', 'SETTLED', 'PENDING', 'REFUNDED'].map(tab => (
                 <button
                   key={tab}
                   onClick={() => setFilterStatus(tab)}
-                  className={`px-3 py-1.5 rounded-[9px] text-[12px] font-bold transition-all ${
+                  className={`px-3 py-1.5 rounded-[9px] text-[12px] font-bold transition-all whitespace-nowrap flex-shrink-0 cursor-pointer ${
                     filterStatus === tab 
                       ? 'bg-white text-navy shadow-sm' 
                       : 'text-slate-500 hover:text-navy'

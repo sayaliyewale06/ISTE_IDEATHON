@@ -95,14 +95,14 @@ const DashboardPage: React.FC = () => {
     <DashboardLayout>
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-[24px] md:text-[32px] font-bold font-display text-navy leading-tight">Dashboard Overview</h1>
-            <p className="text-[14px] md:text-[15px] text-slate-500 mt-1">Monitor your AI Router network in real time.</p>
+            <h1 className="text-[22px] sm:text-[26px] md:text-[32px] font-bold font-display text-navy leading-tight">Dashboard Overview</h1>
+            <p className="text-[13px] md:text-[15px] text-slate-500 mt-0.5">Monitor your AI Router network in real time.</p>
           </div>
           <button
             onClick={() => { setLoading(true); fetchDashboardData(); }}
-            className="px-4 py-2 bg-blue-brand text-white text-xs font-bold rounded-full hover:bg-blue-brand/90 transition-colors"
+            className="self-start sm:self-auto px-4 py-2 bg-blue-brand text-white text-xs font-bold rounded-full hover:bg-blue-brand/90 transition-colors shadow-xs"
           >
             🔄 Refresh
           </button>
@@ -114,24 +114,24 @@ const DashboardPage: React.FC = () => {
           </div>
         )}
 
-        <div className="mb-8 p-5 bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-2xl text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
+        <div className="mb-8 p-4 sm:p-5 bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-2xl text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-[10px] font-bold rounded-full uppercase tracking-wider">
                 Problem Statement Focus
               </span>
-              <span className="text-xs text-indigo-200 font-semibold">Domain: Agentic AI & Distributed Systems</span>
+              <span className="text-[11px] sm:text-xs text-indigo-200 font-semibold">Domain: Agentic AI & Distributed Systems</span>
             </div>
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
               Coordination Without Central Control: Autonomous Agent Resilience
             </h2>
-            <p className="text-xs text-indigo-100/90 max-w-3xl">
+            <p className="text-[11.5px] sm:text-xs text-indigo-100/90 max-w-3xl leading-relaxed">
               Equipped with distributed negotiation, edge-chasing deadlock detection, fault injection test suites, and quantitative benchmark against centralized baselines.
             </p>
           </div>
           <a
             href="/dashboard/coordination"
-            className="px-5 py-2.5 bg-white text-indigo-900 hover:bg-indigo-50 font-bold text-xs rounded-xl shadow transition-all shrink-0 flex items-center gap-2"
+            className="w-full sm:w-auto text-center px-4 py-2.5 bg-white text-indigo-900 hover:bg-indigo-50 font-bold text-xs rounded-xl shadow transition-all shrink-0 flex items-center justify-center gap-2"
           >
             Launch P2P Framework →
           </a>

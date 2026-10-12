@@ -436,19 +436,21 @@ const EscrowPage: React.FC = () => {
         )}
 
         {/* Filter tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100/80 rounded-[14px] w-fit mb-6 border border-slate-200/60">
-          {(['ALL', 'FUNDED', 'RELEASED', 'REFUNDED', 'DISPUTED'] as const).map(s => (
-            <button
-              key={s}
-              onClick={() => setFilterStatus(s)}
-              className={`px-3.5 py-1.5 rounded-[10px] text-[12px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                filterStatus === s ? 'bg-blue-brand text-white shadow-xs' : 'text-slate-600 hover:bg-white hover:text-navy'
-              }`}
-            >
-              {s !== 'ALL' && <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[s].dot}`} />}
-              {s} <span className="text-[11px] opacity-70">({counts[s as keyof typeof counts] ?? escrows.length})</span>
-            </button>
-          ))}
+        <div className="overflow-x-auto pb-1 mb-6 scrollbar-none">
+          <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/80 rounded-[14px] w-fit border border-slate-200/60 min-w-max">
+            {(['ALL', 'FUNDED', 'RELEASED', 'REFUNDED', 'DISPUTED'] as const).map(s => (
+              <button
+                key={s}
+                onClick={() => setFilterStatus(s)}
+                className={`px-3 sm:px-3.5 py-1.5 rounded-[10px] text-[12px] font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                  filterStatus === s ? 'bg-blue-brand text-white shadow-xs' : 'text-slate-600 hover:bg-white hover:text-navy'
+                }`}
+              >
+                {s !== 'ALL' && <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[s].dot}`} />}
+                {s} <span className="text-[11px] opacity-70">({counts[s as keyof typeof counts] ?? escrows.length})</span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Escrow cards grid */}

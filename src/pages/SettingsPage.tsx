@@ -66,7 +66,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
           {/* Right Configuration Form */}
-          <form onSubmit={handleSave} className="bg-white rounded-[24px] p-8 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
+          <form onSubmit={handleSave} className="bg-white rounded-[24px] p-5 sm:p-8 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
             
             {/* Tab 1: General */}
             {activeTab === 'general' && (

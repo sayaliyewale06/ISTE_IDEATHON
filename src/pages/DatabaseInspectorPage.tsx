@@ -102,31 +102,33 @@ const DatabaseInspectorPage: React.FC = () => {
         )}
 
         {/* Tab Selection */}
-        <div className="flex items-center gap-2 mb-6 border-b border-line pb-px">
-          <button
-            onClick={() => setActiveTab('users')}
-            className={`pb-3 px-4 font-display font-bold text-sm border-b-[2px] transition-all cursor-pointer ${
-              activeTab === 'users' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
-            }`}
-          >
-            Users Table ({users.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('tasks')}
-            className={`pb-3 px-4 font-display font-bold text-sm border-b-[2px] transition-all cursor-pointer ${
-              activeTab === 'tasks' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
-            }`}
-          >
-            Tasks Table ({tasks.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('escrows')}
-            className={`pb-3 px-4 font-display font-bold text-sm border-b-[2px] transition-all cursor-pointer ${
-              activeTab === 'escrows' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
-            }`}
-          >
-            Escrow Contracts Table ({escrows.length})
-          </button>
+        <div className="overflow-x-auto pb-1 mb-6 border-b border-line pb-px scrollbar-none">
+          <div className="flex items-center gap-2 min-w-max">
+            <button
+              onClick={() => setActiveTab('users')}
+              className={`pb-3 px-3 sm:px-4 font-display font-bold text-xs sm:text-sm border-b-[2px] transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'users' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
+              }`}
+            >
+              Users Table ({users.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('tasks')}
+              className={`pb-3 px-3 sm:px-4 font-display font-bold text-xs sm:text-sm border-b-[2px] transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'tasks' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
+              }`}
+            >
+              Tasks Table ({tasks.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('escrows')}
+              className={`pb-3 px-3 sm:px-4 font-display font-bold text-xs sm:text-sm border-b-[2px] transition-all whitespace-nowrap cursor-pointer ${
+                activeTab === 'escrows' ? 'border-blue-brand text-blue-brand' : 'border-transparent text-slate-400 hover:text-navy'
+              }`}
+            >
+              Escrow Contracts Table ({escrows.length})
+            </button>
+          </div>
         </div>
 
         {loading ? (

@@ -61,9 +61,9 @@ const ActivityAndAgents: React.FC<ActivityAndAgentsProps> = ({ requests, overvie
             </div>
           ) : (
             overview.map((o, i) => (
-              <div key={i} className="flex items-center justify-between p-3.5 rounded-[16px] border border-line hover:border-blue-brand/30 transition-colors">
+              <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-[16px] border border-line hover:border-blue-brand/30 transition-colors gap-3">
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${o.status === 'Online' ? 'bg-sky text-blue-brand' : 'bg-slate-100 text-slate-500'}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${o.status === 'Online' ? 'bg-sky text-blue-brand' : 'bg-slate-100 text-slate-500'}`}>
                     🤖
                   </div>
                   <div>
@@ -75,7 +75,7 @@ const ActivityAndAgents: React.FC<ActivityAndAgentsProps> = ({ requests, overvie
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-6 text-right">
+                <div className="flex items-center gap-6 text-left sm:text-right pl-11 sm:pl-0">
                   <div>
                     <div className="text-[11px] text-slate-500 font-medium">Latency</div>
                     <div className="text-[13px] font-semibold text-navy mt-0.5">{o.latency}</div>

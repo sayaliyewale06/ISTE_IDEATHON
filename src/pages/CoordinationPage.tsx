@@ -380,25 +380,25 @@ const CoordinationPage: React.FC = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <button
               onClick={() => handleSwitchMode(mode === 'DECENTRALIZED_P2P' ? 'CENTRALISED_BASELINE' : 'DECENTRALIZED_P2P')}
-              className="px-4 py-2.5 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-xs rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-2"
+              className="flex-1 sm:flex-none justify-center px-3.5 py-2.5 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-semibold text-xs rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-2"
             >
-              <Split className="w-4 h-4 text-indigo-600" />
-              Toggle Strategy
+              <Split className="w-4 h-4 text-indigo-600 shrink-0" />
+              <span>Toggle Strategy</span>
             </button>
             <button
               onClick={handleTriggerDeadlock}
               disabled={actionInProgress}
-              className="px-4 py-2.5 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-semibold text-xs rounded-xl shadow-sm transition-all flex items-center gap-2"
+              className="flex-1 sm:flex-none justify-center px-3.5 py-2.5 bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-700 font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center gap-2"
             >
-              <Flame className="w-4 h-4 text-rose-600" />
-              Simulate Deadlock
+              <Flame className="w-4 h-4 text-rose-600 shrink-0" />
+              <span>Simulate Deadlock</span>
             </button>
             <button
               onClick={handleReset}
-              className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all"
+              className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all"
               title="Reset Simulation State"
             >
               <RefreshCw className="w-4 h-4" />
@@ -484,35 +484,37 @@ const CoordinationPage: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-200 mb-6 gap-2">
-          {[
-            { id: 'MESH', label: '1. P2P Mesh & Resources', icon: Network },
-            { id: 'DEADLOCK', label: '2. Deadlock & Dependency Graph', icon: AlertTriangle, badge: unresolvedDeadlocks.length > 0 ? 'ALERT' : undefined },
-            { id: 'RESILIENCE', label: '3. Resilience & Fault Injection', icon: ShieldAlert },
-            { id: 'BENCHMARK', label: '4. Decentralized vs Centralized Benchmark', icon: BarChart3 },
-          ].map(tab => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`pb-3 px-4 font-semibold text-xs md:text-sm flex items-center gap-2 border-b-2 transition-all ${
-                  isActive 
-                    ? 'border-indigo-600 text-indigo-600 font-bold' 
-                    : 'border-transparent text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                {tab.label}
-                {tab.badge && (
-                  <span className="px-1.5 py-0.5 bg-rose-500 text-white rounded text-[10px] font-bold">
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        <div className="overflow-x-auto pb-1 mb-6 -mx-2 px-2 scrollbar-none">
+          <div className="flex border-b border-slate-200 gap-2 min-w-max">
+            {[
+              { id: 'MESH', label: '1. P2P Mesh & Resources', icon: Network },
+              { id: 'DEADLOCK', label: '2. Deadlock & Dependency Graph', icon: AlertTriangle, badge: unresolvedDeadlocks.length > 0 ? 'ALERT' : undefined },
+              { id: 'RESILIENCE', label: '3. Resilience & Fault Injection', icon: ShieldAlert },
+              { id: 'BENCHMARK', label: '4. Decentralized vs Centralized Benchmark', icon: BarChart3 },
+            ].map(tab => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`pb-3 px-3.5 sm:px-4 font-semibold text-xs sm:text-sm flex items-center gap-2 border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                    isActive 
+                      ? 'border-indigo-600 text-indigo-600 font-bold' 
+                      : 'border-transparent text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{tab.label}</span>
+                  {tab.badge && (
+                    <span className="px-1.5 py-0.5 bg-rose-500 text-white rounded text-[10px] font-bold">
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* TAB 1: P2P MESH & RESOURCES */}
@@ -930,14 +932,14 @@ const CoordinationPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
+              <div className="overflow-x-auto -mx-2 px-2 sm:mx-0 sm:px-0">
+                <table className="w-full text-left text-xs min-w-[600px]">
                   <thead className="bg-slate-50 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
                     <tr>
-                      <th className="py-3 px-4 font-bold">Metric / Objective</th>
-                      <th className="py-3 px-4 font-bold text-indigo-700">Proposed: Decentralized P2P Mesh</th>
-                      <th className="py-3 px-4 font-bold text-slate-700">Baseline: Centralized Controller</th>
-                      <th className="py-3 px-4 font-bold text-emerald-700">Advantage</th>
+                      <th className="py-3 px-3 sm:px-4 font-bold">Metric / Objective</th>
+                      <th className="py-3 px-3 sm:px-4 font-bold text-indigo-700">Proposed: Decentralized P2P Mesh</th>
+                      <th className="py-3 px-3 sm:px-4 font-bold text-slate-700">Baseline: Centralized Controller</th>
+                      <th className="py-3 px-3 sm:px-4 font-bold text-emerald-700">Advantage</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
