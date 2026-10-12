@@ -1,0 +1,120 @@
+/* ===================================================================
+   ALGOVERSE GLOBAL THEME TOKENS
+   Warm, soft, premium aesthetic matching Home Dashboard pixel-for-pixel
+=================================================================== */
+
+:root {
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-handwriting: 'Caveat', cursive;
+
+  /* Page Background */
+  --bg-page-gradient: linear-gradient(180deg, #FFF6EE 0%, #FFEFE3 50%, #FDF3EC 100%);
+  --blob-peach: #FFD9BF;
+  --blob-lavender: #E6DDFB;
+  --blob-blue: #DCEBFF;
+
+  /* Primary Brand Orange */
+  --color-primary: #F26B21;
+  --color-primary-hover: #E25C14;
+  --gradient-primary: linear-gradient(135deg, #FF8A4C 0%, #F26B21 100%);
+  --shadow-primary-glow: 0 4px 14px rgba(242, 107, 33, 0.3);
+  --shadow-primary-glow-hover: 0 6px 20px rgba(242, 107, 33, 0.42);
+
+  /* Typography Colors */
+  --color-heading: #1B2559;
+  --color-body: #5B6B8C;
+  --color-muted: #8F9BBA;
+
+  /* Accent Tints (Icon badges, stat backgrounds, pills) */
+  --tint-peach: #FFE9DC;
+  --tint-peach-text: #F26B21;
+  --tint-lavender: #EDE7FF;
+  --tint-lavender-text: #7048E8;
+  --tint-mint: #DDF6EC;
+  --tint-mint-text: #0CA678;
+  --tint-blue: #E3EFFF;
+  --tint-blue-text: #228BE6;
+
+  /* Glass Card System */
+  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-blur: 12px;
+  --card-radius: 20px;
+  --card-border: 1px solid rgba(255, 255, 255, 0.85);
+  --card-shadow: 0 8px 30px rgba(242, 107, 33, 0.08);
+  --card-shadow-hover: 0 12px 36px rgba(242, 107, 33, 0.12);
+
+  /* Interactive Elements */
+  --input-radius: 14px;
+  --input-border: 1px solid rgba(226, 232, 240, 0.85);
+  --input-focus-ring: 0 0 0 3px rgba(242, 107, 33, 0.15);
+  --transition-smooth: all 200ms ease;
+}
+
+/* Global Typography defaults */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-heading);
+  letter-spacing: -0.02em;
+}
+
+.font-handwriting {
+  font-family: var(--font-handwriting);
+}
+
+/* Glass Card Utility */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  -webkit-backdrop-filter: blur(var(--card-blur));
+  border-radius: var(--card-radius);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition-smooth);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Primary Button with Orange Glow */
+.btn-primary-gradient {
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-primary-glow);
+  color: #FFFFFF;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary-glow-hover);
+}
+
+/* Styled Inputs */
+.input-styled {
+  background: #FFFFFF;
+  border-radius: var(--input-radius);
+  border: var(--input-border);
+  transition: var(--transition-smooth);
+}
+
+.input-styled:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--input-focus-ring);
+}
+
+/* Selected option card */
+.option-card-selected {
+  background: var(--tint-peach) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 4px 16px rgba(242, 107, 33, 0.15);
+}

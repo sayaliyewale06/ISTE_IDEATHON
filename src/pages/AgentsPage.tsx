@@ -1,267 +1,301 @@
-import React, { useState, useEffect } from 'react';
-import { API_BASE } from '../config';
+import React, { useState } from 'react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
+import PageHeader from '../components/ui/PageHeader';
+import StatCard from '../components/ui/StatCard';
+import GlassCard from '../components/ui/GlassCard';
+import Button from '../components/ui/Button';
+import Badge from '../components/ui/Badge';
+import { useToast } from '../context/ToastContext';
+import { 
+  Users, 
+  CheckCircle2, 
+  Clock, 
+  AlertCircle, 
+  Plus, 
+  MoreVertical,
+  Bot,
+  HeartHandshake,
+  Truck,
+  CircleDollarSign,
+  Search,
+  Headphones,
+  Zap
+} from 'lucide-react';
 
-interface Agent {
+interface AgentItem {
+  id: string;
   name: string;
-  icon: string;
-  desc: string;
-  status: string;
-  load: string;
-  latency: string;
-  success: string;
-  tags: string[];
+  type: string;
+  iconBg: string;
+  iconColor: string;
+  icon: React.ReactNode;
+  status: 'Online' | 'Idle' | 'Offline';
+  responseTime: string;
 }
 
+const initialAgents: AgentItem[] = [
+  {
+    id: 'a-1',
+    name: 'Medical Triage AI',
+    type: 'Healthcare',
+    iconBg: 'bg-[#FFE3E3]',
+    iconColor: 'text-[#FA5252]',
+    icon: <HeartHandshake className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '28ms'
+  },
+  {
+    id: 'a-2',
+    name: 'Logistics Agent',
+    type: 'Logistics',
+    iconBg: 'bg-[#EDE7FF]',
+    iconColor: 'text-[#7048E8]',
+    icon: <Truck className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '42ms'
+  },
+  {
+    id: 'a-3',
+    name: 'Finance Agent',
+    type: 'Finance',
+    iconBg: 'bg-[#DDF6EC]',
+    iconColor: 'text-[#0CA678]',
+    icon: <CircleDollarSign className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '30ms'
+  },
+  {
+    id: 'a-4',
+    name: 'Research Agent',
+    type: 'Research',
+    iconBg: 'bg-[#E3EFFF]',
+    iconColor: 'text-[#228BE6]',
+    icon: <Search className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '31ms'
+  },
+  {
+    id: 'a-5',
+    name: 'Customer Support',
+    type: 'Support',
+    iconBg: 'bg-[#FFF3BF]',
+    iconColor: 'text-[#F59F00]',
+    icon: <Headphones className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '45ms'
+  },
+  {
+    id: 'a-6',
+    name: 'Smart Escrow Guardian',
+    type: 'Security',
+    iconBg: 'bg-[#FFE9DC]',
+    iconColor: 'text-[#F26B21]',
+    icon: <Zap className="w-5 h-5" />,
+    status: 'Online',
+    responseTime: '24ms'
+  }
+];
+
 const AgentsPage: React.FC = () => {
-  const [agentsList, setAgentsList] = useState<Agent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { showSuccess, showError } = useToast();
+  const [agents, setAgents] = useState<AgentItem[]>(initialAgents);
+  const [filter, setFilter] = useState<'All' | 'Active' | 'Idle' | 'Offline'>('All');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newAgentName, setNewAgentName] = useState('');
+  const [newAgentType, setNewAgentType] = useState('Healthcare');
 
-  const fetchAgents = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/task/agents`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setAgentsList(data.agents || []);
-        setError('');
-        return;
-      }
-    } catch (err: any) {
-      console.warn('Backend unavailable, using resilient fallback agent registry:', err);
+  const handleAddAgent = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAgentName.trim()) {
+      showError('Please enter an agent name.');
+      return;
     }
-
-    setAgentsList([
-      {
-        name: 'Medical Triage AI',
-        icon: '🚑',
-        desc: 'Coordinates emergency ICU admissions and high-priority trauma ambulance leases.',
-        status: 'Online',
-        load: '68%',
-        latency: '28ms',
-        success: '99.4%',
-        tags: ['Critical Triage', 'P2P Priority', 'Emergency Mesh']
-      },
-      {
-        name: 'Blood Bank AI',
-        icon: '🩸',
-        desc: 'Brokers scarce O-negative blood reserves across regional hospital hubs.',
-        status: 'Online',
-        load: '48%',
-        latency: '31ms',
-        success: '98.7%',
-        tags: ['Cold-Chain', 'Inventory Mesh', 'Priority Barter']
-      },
-      {
-        name: 'Disaster Logistics AI',
-        icon: '📦',
-        desc: 'Manages convoy transport, oxygen concentrators, and relief supply routes.',
-        status: 'Online',
-        load: '54%',
-        latency: '42ms',
-        success: '97.5%',
-        tags: ['Convoys', 'Transport Quotas', 'Consensus']
-      },
-      {
-        name: 'Grid Telemetry AI',
-        icon: '📡',
-        desc: 'Monitors distributed routing topology, sensor mesh, and communication health.',
-        status: 'Online',
-        load: '22%',
-        latency: '15ms',
-        success: '99.0%',
-        tags: ['Heartbeat', 'Fault Detection', 'Topology']
-      },
-      {
-        name: 'Escrow Settlement AI',
-        icon: '💳',
-        desc: 'Enforces atomic two-phase resource reservation locks and financial deposits.',
-        status: 'Online',
-        load: '38%',
-        latency: '65ms',
-        success: '99.9%',
-        tags: ['Atomic Locks', 'Smart Escrow', 'Dispute Guard']
-      }
-    ]);
-    setError('');
-    setLoading(false);
+    const created: AgentItem = {
+      id: `a-${Date.now()}`,
+      name: newAgentName.trim(),
+      type: newAgentType,
+      iconBg: 'bg-[#FFE9DC]',
+      iconColor: 'text-[#F26B21]',
+      icon: <Bot className="w-5 h-5" />,
+      status: 'Online',
+      responseTime: `${Math.floor(Math.random() * 20) + 20}ms`
+    };
+    setAgents([created, ...agents]);
+    setNewAgentName('');
+    setIsModalOpen(false);
+    showSuccess(`Agent "${created.name}" registered to P2P mesh!`);
   };
 
-
-  useEffect(() => {
-    fetchAgents();
-    const interval = setInterval(fetchAgents, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const totalAgents = agentsList.length;
-  const onlineAgents = agentsList.filter(a => a.status === 'Online').length;
-  const busyAgents = agentsList.filter(a => a.status === 'Busy').length;
-
-  const displayMetrics = [
-    { label: 'Total Agents', value: totalAgents.toString(), icon: '🤖' },
-    { label: 'Online', value: onlineAgents.toString(), icon: '✅' },
-    { label: 'Average Latency', value: totalAgents === 0 ? '0ms' : '42ms', icon: '⚡' },
-    { label: 'System Uptime', value: '99.9%', icon: '📈' },
-  ];
-
-
+  const filteredAgents = agents.filter(a => {
+    if (filter === 'All') return true;
+    if (filter === 'Active') return a.status === 'Online';
+    if (filter === 'Idle') return a.status === 'Idle';
+    if (filter === 'Offline') return a.status === 'Offline';
+    return true;
+  });
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto pb-10">
+      <div className="space-y-7 pb-12">
         
-        {/* Page Header */}
-        <div className="flex flex-col gap-3 mb-8">
-          <h1 className="text-[24px] md:text-[32px] font-bold font-display text-navy leading-tight">AI Agents</h1>
-          <p className="text-[14px] md:text-[15px] text-slate-500">
-            Monitor, manage and optimize every AI agent connected to the router.
-          </p>
+        {/* ================= HERO HEADER ================= */}
+        <PageHeader
+          title="AI Agents"
+          subtitle="Manage and monitor your AI agents in the P2P mesh."
+          tagline="Specialized minds, working together ✦"
+          action={
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              icon={<Plus className="w-4 h-4" />}
+            >
+              Add Agent
+            </Button>
+          }
+        />
+
+        {/* ================= 4 STAT CARDS ROW ================= */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <StatCard
+            title="Total Agents"
+            value="25"
+            change="3"
+            tint="blue"
+            icon={<Users className="w-5 h-5" />}
+          />
+          <StatCard
+            title="Active Agents"
+            value="22"
+            change="1"
+            tint="mint"
+            icon={<CheckCircle2 className="w-5 h-5" />}
+          />
+          <StatCard
+            title="Idle Agents"
+            value="2"
+            tint="peach"
+            icon={<Clock className="w-5 h-5" />}
+          />
+          <StatCard
+            title="Offline Agents"
+            value="1"
+            tint="lavender"
+            icon={<AlertCircle className="w-5 h-5" />}
+          />
         </div>
 
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-600 text-xs font-semibold">
-            {error}
-          </div>
-        )}
+        {/* ================= FILTER TABS ================= */}
+        <div className="flex items-center gap-2.5">
+          {(['All', 'Active', 'Idle', 'Offline'] as const).map((tab) => {
+            const isSelected = filter === tab;
+            const counts = { All: 25, Active: 22, Idle: 2, Offline: 1 };
+            return (
+              <button
+                key={tab}
+                onClick={() => setFilter(tab)}
+                className={`px-4 py-2 rounded-[14px] text-xs font-bold transition-all duration-200 cursor-pointer ${
+                  isSelected
+                    ? 'bg-[#FFE3D1] text-[#F26B21] border border-[#F26B21]/30 shadow-2xs'
+                    : 'bg-white/80 text-[#5B6B8C] border border-white hover:bg-white hover:text-[#1B2559]'
+                }`}
+              >
+                <span>{tab}</span>
+                <span className={`ml-1.5 ${isSelected ? 'text-[#F26B21]' : 'text-[#8F9BBA]'}`}>
+                  ({counts[tab]})
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
-        {/* Top Summary */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          {displayMetrics.map((m, idx) => (
-            <div key={idx} className="bg-white rounded-[20px] p-6 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-11 h-11 rounded-full bg-sky flex items-center justify-center text-xl text-blue-brand">
-                  {m.icon}
+        {/* ================= AGENT CARDS GRID WITH HOVER LIFT ================= */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredAgents.map((agent) => (
+            <GlassCard key={agent.id} className="p-6 flex flex-col justify-between h-48">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3.5">
+                  <div className={`w-12 h-12 rounded-2xl ${agent.iconBg} ${agent.iconColor} flex items-center justify-center shrink-0 shadow-2xs`}>
+                    {agent.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-[15px] font-extrabold text-[#1B2559] tracking-tight leading-tight">
+                      {agent.name}
+                    </h3>
+                    <span className="text-xs text-[#5B6B8C] font-semibold mt-0.5 block">
+                      {agent.type}
+                    </span>
+                  </div>
                 </div>
+
+                <button className="p-1.5 rounded-lg text-slate-400 hover:text-[#1B2559] hover:bg-white/80 transition-colors cursor-pointer">
+                  <MoreVertical className="w-4 h-4" />
+                </button>
               </div>
-              <div>
-                <div className="text-[13px] font-medium text-slate-500 mb-1">{m.label}</div>
-                <div className="text-[28px] font-bold font-display text-navy tracking-tight leading-none">
-                  {m.value}
+
+              {/* Status and Latency Row */}
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100/60 mt-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="text-xs font-bold text-emerald-600">Online</span>
                 </div>
+
+                <Badge variant="mint">
+                  {agent.responseTime}
+                </Badge>
               </div>
-            </div>
+            </GlassCard>
           ))}
         </div>
 
-        {/* Main Section + Right Panel */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 mb-8">
-          
-          {/* Main Section: Agent Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {loading ? (
-              <div className="col-span-2 p-12 text-center bg-white rounded-[24px] border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-                <div className="w-8 h-8 border-4 border-sky border-t-blue-brand rounded-full animate-spin mx-auto mb-3"></div>
-                <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Retrieving Connected Agents...</span>
-              </div>
-            ) : agentsList.length === 0 ? (
-              <div className="col-span-2 p-16 text-center bg-white rounded-[24px] border border-line border-dashed">
-                <div className="text-4xl mb-3">🤖</div>
-                <h4 className="text-[15px] font-bold text-navy mb-1">No AI Agents Registered</h4>
-                <p className="text-[12.5px] text-slate-500 max-w-[280px] mx-auto">
-                  Seed the database using the reset script to register the standard AI routing nodes.
-                </p>
-              </div>
-            ) : (
-              agentsList.map((agent) => (
-                <div key={agent.name} className="bg-white rounded-[24px] p-6 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)] flex flex-col">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-sky flex items-center justify-center text-[20px] text-blue-brand shrink-0">
-                        {agent.icon}
-                      </div>
-                      <div>
-                        <div className="text-[16px] font-bold text-navy">{agent.name}</div>
-                        <div className="text-[12px] text-slate-500 leading-snug max-w-[160px]">{agent.desc}</div>
-                      </div>
-                    </div>
-                    <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shrink-0 ${
-                      agent.status === 'Online' ? 'bg-[#E3FBF5] text-[#0E7D69]' : 
-                      agent.status === 'Busy' ? 'bg-[#FFF3E0] text-[#E65100]' : 
-                      'bg-slate-100 text-slate-500'
-                    }`}>
-                      {agent.status}
-                    </span>
-                  </div>
+        {/* Modal: Add Agent */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/30 backdrop-blur-xs p-4">
+            <GlassCard className="max-w-md w-full p-6 animate-in fade-in zoom-in-95">
+              <h3 className="text-lg font-extrabold text-[#1B2559]">Add Autonomous AI Agent</h3>
+              <p className="text-xs text-[#5B6B8C] mt-1 font-medium">Register a peer agent node to participate in decentralized routing.</p>
 
-                  <div className="grid grid-cols-3 gap-3 mb-5 p-3 bg-slate-50 rounded-[12px] border border-line/50">
-                    <div>
-                      <div className="text-[11px] text-slate-500 font-medium mb-0.5">Load</div>
-                      <div className="text-[13px] font-bold text-navy">{agent.load}</div>
-                    </div>
-                    <div>
-                      <div className="text-[11px] text-slate-500 font-medium mb-0.5">Latency</div>
-                      <div className="text-[13px] font-bold text-navy">{agent.latency}</div>
-                    </div>
-                    <div>
-                      <div className="text-[11px] text-slate-500 font-medium mb-0.5">Success</div>
-                      <div className="text-[13px] font-bold text-navy">{agent.success}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 mb-6 flex-1">
-                    {agent.tags.map(tag => (
-                      <span key={tag} className="px-2.5 py-1 bg-sky text-blue-brand text-[11px] font-medium rounded-full">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-
+              <form onSubmit={handleAddAgent} className="space-y-4 mt-5">
+                <div>
+                  <label className="text-xs font-bold text-[#1B2559] block mb-1">Agent Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={newAgentName}
+                    onChange={(e) => setNewAgentName(e.target.value)}
+                    placeholder="e.g. Diagnostic Synthesis AI"
+                    className="w-full text-xs px-3.5 py-2.5 rounded-[14px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559]"
+                  />
                 </div>
-              ))
-            )}
+                <div>
+                  <label className="text-xs font-bold text-[#1B2559] block mb-1">Category / Domain</label>
+                  <select
+                    value={newAgentType}
+                    onChange={(e) => setNewAgentType(e.target.value)}
+                    className="w-full text-xs px-3 py-2.5 rounded-[14px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559]"
+                  >
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Logistics">Logistics</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Research">Research</option>
+                    <option value="Support">Support</option>
+                    <option value="Security">Security</option>
+                  </select>
+                </div>
+                <div className="flex items-center justify-end gap-2.5 pt-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-[#5B6B8C] hover:bg-slate-100 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <Button type="submit">
+                    Register Agent
+                  </Button>
+                </div>
+              </form>
+            </GlassCard>
           </div>
-
-          {/* Right Panel: Agent Health */}
-          <div className="flex flex-col gap-6">
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)] sticky top-[96px]">
-              <h3 className="text-[16px] font-bold text-navy mb-6">Agent Health</h3>
-              
-              <div className="flex justify-center mb-8">
-                <div className="relative w-[140px] h-[140px]">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#EAF1FF" strokeWidth="12" />
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#2F5FFF" strokeWidth="12" strokeDasharray="264" strokeDashoffset="0.5" strokeLinecap="round" />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-[24px] font-bold font-display text-navy leading-none">99.8%</span>
-                    <span className="text-[11px] font-medium text-slate-500 mt-1">Overall Health</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Online Agents</span>
-                  <span className="font-bold text-navy">{onlineAgents}</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Busy</span>
-                  <span className="font-bold text-navy">{busyAgents}</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Offline</span>
-                  <span className="font-bold text-navy">{totalAgents - onlineAgents - busyAgents}</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px] pt-4 border-t border-line">
-                  <span className="text-slate-500 font-medium">Average Response</span>
-                  <span className="font-bold text-navy">{totalAgents === 0 ? '0ms' : '42ms'}</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">System Status</span>
-                  <span className="font-bold text-[#0E7D69] bg-[#E3FBF5] px-2 py-0.5 rounded-full text-[11px] uppercase tracking-wide">Healthy</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-
-
+        )}
 
       </div>
     </DashboardLayout>

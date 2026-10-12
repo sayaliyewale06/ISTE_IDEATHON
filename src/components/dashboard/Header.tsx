@@ -1,23 +1,18 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { Search, Bell, ChevronDown } from 'lucide-react';
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
-  const { user } = useAuth();
-  const userName = user?.name || 'User';
-  const userInitial = userName.charAt(0).toUpperCase();
-
   return (
-    <header className="h-[64px] bg-white border-b border-line flex items-center justify-between px-4 md:px-8 sticky top-0 z-30">
-
-      <div className="flex items-center gap-3">
-        {/* Hamburger - mobile only */}
+    <header className="h-[72px] bg-white/70 backdrop-blur-md border-b border-orange-100/50 flex items-center justify-between px-5 md:px-8 sticky top-0 z-30 transition-all">
+      <div className="flex items-center gap-3 flex-1 max-w-xl">
+        {/* Mobile menu trigger */}
         <button
           onClick={onMenuClick}
-          className="lg:hidden w-9 h-9 rounded-[10px] hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+          className="lg:hidden w-9 h-9 rounded-xl hover:bg-orange-50/60 flex items-center justify-center text-slate-600 transition-colors"
           aria-label="Open menu"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -25,46 +20,38 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </svg>
         </button>
 
-        {/* Search */}
-        <div className="flex-1 max-w-[160px] sm:max-w-xs md:max-w-md">
+        {/* Search Pill */}
+        <div className="w-full max-w-md">
           <div className="relative flex items-center">
-            <svg className="w-4 h-4 absolute left-3 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <Search className="w-4 h-4 absolute left-3.5 text-[#8F9BBA] shrink-0" />
             <input
               type="text"
-              placeholder="Search..."
-              className="w-full bg-slate-50 border border-line rounded-full py-1.5 sm:py-2 pl-9 pr-3 sm:pr-4 text-[12px] sm:text-[13px] text-ink focus:outline-none focus:border-blue-brand transition-colors"
+              placeholder="Search events, agents, or requests..."
+              className="w-full bg-white/90 border border-slate-200/80 rounded-full py-2 pl-10 pr-4 text-[13px] text-[#1B2559] placeholder-[#8F9BBA] focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 transition-all shadow-2xs"
             />
           </div>
         </div>
       </div>
 
-      {/* Right side */}
-      <div className="flex items-center gap-2 sm:gap-3 md:gap-5">
-
-        {/* Notifications */}
-        <button className="relative w-9 h-9 rounded-full hover:bg-slate-50 flex items-center justify-center text-slate-500 transition-colors">
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-brand rounded-full border border-white"></span>
+      {/* Right side Profile & Notifications */}
+      <div className="flex items-center gap-4">
+        {/* Notifications with Orange Dot */}
+        <button className="relative w-9 h-9 rounded-full bg-white/80 border border-slate-100 hover:bg-white flex items-center justify-center text-slate-600 transition-colors cursor-pointer shadow-2xs">
+          <Bell className="w-4 h-4 text-[#1B2559]" />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-[#F26B21] rounded-full border border-white"></span>
         </button>
 
-        <div className="w-px h-6 bg-line hidden sm:block"></div>
-
-        {/* User */}
-        <div className="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-full bg-navy flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
-            {userInitial}
+        {/* User Profile Pill */}
+        <div className="flex items-center gap-2.5 cursor-pointer bg-white/70 hover:bg-white/90 border border-slate-100/80 rounded-full py-1 px-1.5 pr-3 transition-all shadow-2xs">
+          <div className="w-8 h-8 rounded-full bg-[#FFE9DC] text-[#F26B21] flex items-center justify-center font-bold text-xs flex-shrink-0">
+            MS
           </div>
-          <div className="hidden md:block">
-            <div className="text-[13px] font-semibold text-navy leading-tight">{userName}</div>
-            <div className="text-[11px] text-slate-500">Admin</div>
+          <div className="hidden sm:flex items-center gap-1.5">
+            <span className="text-[13px] font-bold text-[#1B2559]">Meera Sharma</span>
+            <ChevronDown className="w-3.5 h-3.5 text-[#8F9BBA]" />
           </div>
         </div>
       </div>
-
     </header>
   );
 };

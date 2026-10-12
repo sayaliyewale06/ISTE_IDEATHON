@@ -1,261 +1,355 @@
 import React, { useState } from 'react';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
+import PageHeader from '../components/ui/PageHeader';
+import GlassCard from '../components/ui/GlassCard';
+import Button from '../components/ui/Button';
 import { useToast } from '../context/ToastContext';
+import { 
+  Network, 
+  Clock, 
+  Globe, 
+  Sun, 
+  ShieldCheck, 
+  Bell, 
+  Sliders, 
+  Check, 
+  Save
+} from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
   const { showSuccess } = useToast();
-  const [activeTab, setActiveTab] = useState<'general' | 'wallet' | 'x402' | 'endpoints'>('general');
-  
-  // Settings Form State
-  const [routerName, setRouterName] = useState('Atomic Multi-Agent Service Router');
-  const [executionTimeout, setExecutionTimeout] = useState('10');
-  const [smartRouting, setSmartRouting] = useState(true);
-  const [walletAddress, setWalletAddress] = useState('ALGO_ROUTER_MAIN_W9812A4789X012');
-  const [algorandNetwork, setAlgorandNetwork] = useState('TestNet');
-  const [usdcAssetId, setUsdcAssetId] = useState('10458941'); // TestNet USDC ASA ID
-  const [autoRollback, setAutoRollback] = useState(true);
-  const [nonceExpiry, setNonceExpiry] = useState('300');
-  const [maxPaymentCap, setMaxPaymentCap] = useState('20.00');
-  const [facilitatorUrl, setFacilitatorUrl] = useState('http://localhost:3002/facilitator');
-  const [algonodeUrl, setAlgonodeUrl] = useState('https://testnet-api.algonode.cloud');
+  const [activeTab, setActiveTab] = useState<'General' | 'Network' | 'Agents' | 'Notifications' | 'Security'>('General');
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    showSuccess('Settings updated successfully!');
+  // General Settings state
+  const [networkName, setNetworkName] = useState('AlgoVerse P2P Mesh');
+  const [timezone, setTimezone] = useState('(GMT+5:30) India Standard Time');
+  const [language, setLanguage] = useState('English');
+  const [theme, setTheme] = useState('Light');
+
+  // Toggles in orange
+  const [autoRebalance, setAutoRebalance] = useState(true);
+  const [peerDiscovery, setPeerDiscovery] = useState(true);
+  const [instantSettlement, setInstantSettlement] = useState(true);
+  const [emailAlerts, setEmailAlerts] = useState(false);
+
+  // Editing state
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [tempValue, setTempValue] = useState('');
+
+  const startEdit = (field: string, currentVal: string) => {
+    setEditingField(field);
+    setTempValue(currentVal);
+  };
+
+  const saveEdit = (field: string) => {
+    if (field === 'Network Name') setNetworkName(tempValue);
+    if (field === 'Timezone') setTimezone(tempValue);
+    if (field === 'Language') setLanguage(tempValue);
+    if (field === 'Theme') setTheme(tempValue);
+
+    setEditingField(null);
+    showSuccess(`${field} updated successfully!`);
   };
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto pb-10">
+      <div className="space-y-7 pb-12 max-w-5xl">
         
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="text-[32px] font-bold font-display text-navy leading-tight">Settings & System Configuration</h1>
-            <p className="text-[15px] text-slate-500 mt-1 max-w-[650px]">
-              Manage Algorand wallet settings, x402 protocol limits, automatic rollback policies, and Facilitator endpoints.
-            </p>
-          </div>
-        </div>
+        {/* ================= HERO HEADER ================= */}
+        <PageHeader
+          title="Settings"
+          subtitle="Configure your network, agents, and preferences."
+          tagline="Tailor your intelligent node ✦"
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
-          
-          {/* Navigation Tabs - horizontal scroll on mobile, vertical on desktop */}
-          <div className="bg-white rounded-[24px] p-3 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)] h-fit">
-            <div className="flex flex-row lg:flex-col gap-1 overflow-x-auto lg:overflow-visible pb-1 lg:pb-0">
-            {[
-              { id: 'general', label: 'General & Router', icon: '⚙' },
-              { id: 'wallet', label: 'Wallet', icon: '💳' },
-              { id: 'x402', label: 'x402 Protocol', icon: '🛡' },
-              { id: 'endpoints', label: 'API Endpoints', icon: '🌐' }
-            ].map(tab => (
+        {/* ================= SUB-TABS ROW ================= */}
+        <div className="flex items-center gap-6 border-b border-orange-100/70 text-xs font-bold overflow-x-auto">
+          {(['General', 'Network', 'Agents', 'Notifications', 'Security'] as const).map((tab) => {
+            const isSelected = activeTab === tab;
+            return (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-3 lg:px-4 py-2.5 rounded-[12px] lg:rounded-[14px] text-[12.5px] lg:text-[13.5px] font-bold transition-all text-left whitespace-nowrap flex-shrink-0 lg:flex-shrink ${
-                  activeTab === tab.id 
-                    ? 'bg-sky text-blue-brand' 
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-navy'
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`pb-3.5 transition-all duration-200 whitespace-nowrap border-b-2 font-extrabold cursor-pointer ${
+                  isSelected
+                    ? 'border-[#F26B21] text-[#F26B21]'
+                    : 'border-transparent text-[#5B6B8C] hover:text-[#1B2559]'
                 }`}
               >
-                <span className="text-sm lg:text-base">{tab.icon}</span>
-                <span>{tab.label}</span>
+                {tab}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-          {/* Right Configuration Form */}
-          <form onSubmit={handleSave} className="bg-white rounded-[24px] p-5 sm:p-8 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
+        {/* ================= SECTION 1: GENERAL SETTINGS GLASS CARD ================= */}
+        <GlassCard className="p-7 md:p-9 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[17px] font-extrabold text-[#1B2559] tracking-tight">
+              General Configuration
+            </h2>
+            <span className="text-xs font-semibold text-[#8F9BBA]">Node ID: #AG-78921</span>
+          </div>
+
+          <div className="divide-y divide-slate-100/70">
             
-            {/* Tab 1: General */}
-            {activeTab === 'general' && (
-              <div className="flex flex-col gap-6">
+            {/* Setting 1: Network Name */}
+            <div className="py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-[#FFE9DC] text-[#F26B21] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <Network className="w-5 h-5" />
+                </div>
                 <div>
-                  <h3 className="text-[18px] font-bold text-navy mb-1">Router General Settings</h3>
-                  <p className="text-[13px] text-slate-500">Configure public instance identity and default agent execution policies.</p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-navy">Router Instance Name</label>
-                  <input
-                    type="text"
-                    value={routerName}
-                    onChange={(e) => setRouterName(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] text-[14px] text-ink focus:outline-none focus:border-blue-brand"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-navy">Max Request Execution Timeout (Seconds)</label>
-                  <input
-                    type="number"
-                    value={executionTimeout}
-                    onChange={(e) => setExecutionTimeout(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] text-[14px] text-ink focus:outline-none focus:border-blue-brand"
-                  />
-                </div>
-
-                <div className="pt-4 border-t border-line flex items-center justify-between">
-                  <div>
-                    <div className="text-[14px] font-bold text-navy">Smart Agent Routing</div>
-                    <div className="text-[12.5px] text-slate-500">Automatically select agents based on latency, price, and reputation score.</div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={smartRouting}
-                    onChange={(e) => setSmartRouting(e.target.checked)}
-                    className="w-5 h-5 accent-blue-brand rounded cursor-pointer"
-                  />
+                  <div className="text-[13.5px] font-extrabold text-[#1B2559]">Network Name</div>
+                  {editingField === 'Network Name' ? (
+                    <input
+                      type="text"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="mt-1.5 text-xs px-3 py-1.5 rounded-[12px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559] font-bold"
+                    />
+                  ) : (
+                    <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">{networkName}</div>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* Tab 2: Algorand Wallet */}
-            {activeTab === 'wallet' && (
-              <div className="flex flex-col gap-6">
-                <div>
-                  <h3 className="text-[18px] font-bold text-navy mb-1">Algorand Wallet & ASA Tokens</h3>
-                  <p className="text-[13px] text-slate-500">Manage payment keys and native stablecoin settlement on Algorand.</p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-navy">Router Public Wallet Address</label>
-                  <input
-                    type="text"
-                    value={walletAddress}
-                    onChange={(e) => setWalletAddress(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-line font-mono text-[13px] text-ink focus:outline-none focus:border-blue-brand"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-navy">Algorand Network</label>
-                    <select
-                      value={algorandNetwork}
-                      onChange={(e) => setAlgorandNetwork(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] text-[14px] text-ink focus:outline-none focus:border-blue-brand"
+              <div>
+                {editingField === 'Network Name' ? (
+                  <div className="flex items-center gap-2">
+                    <Button onClick={() => saveEdit('Network Name')} className="py-1.5 px-3 text-xs">
+                      Save
+                    </Button>
+                    <button
+                      onClick={() => setEditingField(null)}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#8F9BBA] hover:text-[#1B2559] cursor-pointer"
                     >
-                      <option value="TestNet">TestNet (Recommended for Hackathon)</option>
-                      <option value="MainNet">MainNet (Production)</option>
-                    </select>
+                      Cancel
+                    </button>
                   </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-navy">USDC ASA Asset ID</label>
-                    <input
-                      type="text"
-                      value={usdcAssetId}
-                      onChange={(e) => setUsdcAssetId(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] font-mono text-[13px] text-ink focus:outline-none focus:border-blue-brand"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 bg-sky/50 rounded-[16px] border border-blue-brand/20 flex items-center justify-between gap-4">
-                  <div>
-                    <div className="text-[13.5px] font-bold text-navy">TestNet Faucet Helper</div>
-                    <div className="text-[12px] text-slate-500">Need test funds for demonstration? Request ALGO and testnet USDC instantly.</div>
-                  </div>
+                ) : (
                   <button
-                    type="button"
-                    onClick={() => showSuccess('Requested 10 ALGO from TestNet Faucet! Balance updated.')}
-                    className="px-4 py-2 bg-blue-brand text-white font-bold text-[12.5px] rounded-full hover:bg-blue-dark transition-colors shrink-0"
+                    onClick={() => startEdit('Network Name', networkName)}
+                    className="text-xs font-bold text-[#8F9BBA] hover:text-[#F26B21] transition-colors cursor-pointer"
                   >
-                    Request Faucet
+                    Edit
                   </button>
-                </div>
+                )}
               </div>
-            )}
+            </div>
 
-            {/* Tab 3: x402 Protocol */}
-            {activeTab === 'x402' && (
-              <div className="flex flex-col gap-6">
+            {/* Setting 2: Timezone */}
+            <div className="py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-[#E3EFFF] text-[#228BE6] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <Clock className="w-5 h-5" />
+                </div>
                 <div>
-                  <h3 className="text-[18px] font-bold text-navy mb-1">x402 Protocol & Atomicity Rules</h3>
-                  <p className="text-[13px] text-slate-500">Configure HTTP 402 challenge parameters and all-or-nothing rollback behavior.</p>
-                </div>
-
-                <div className="pt-2 border-t border-line flex items-center justify-between">
-                  <div>
-                    <div className="text-[14px] font-bold text-navy">Automatic Atomic Rollback</div>
-                    <div className="text-[12.5px] text-slate-500">If any required sub-agent fails, automatically issue refunds for prior completed calls.</div>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={autoRollback}
-                    onChange={(e) => setAutoRollback(e.target.checked)}
-                    className="w-5 h-5 accent-blue-brand rounded cursor-pointer"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-navy">Nonce TTL / Expiry (Seconds)</label>
-                    <input
-                      type="number"
-                      value={nonceExpiry}
-                      onChange={(e) => setNonceExpiry(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] text-[14px] text-ink focus:outline-none focus:border-blue-brand"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-navy">Max Micro-Payment Cap ($ USDC)</label>
+                  <div className="text-[13.5px] font-extrabold text-[#1B2559]">Timezone</div>
+                  {editingField === 'Timezone' ? (
                     <input
                       type="text"
-                      value={maxPaymentCap}
-                      onChange={(e) => setMaxPaymentCap(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-line rounded-[12px] text-[14px] text-ink focus:outline-none focus:border-blue-brand"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="mt-1.5 text-xs px-3 py-1.5 rounded-[12px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559] font-bold"
                     />
+                  ) : (
+                    <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">{timezone}</div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                {editingField === 'Timezone' ? (
+                  <div className="flex items-center gap-2">
+                    <Button onClick={() => saveEdit('Timezone')} className="py-1.5 px-3 text-xs">
+                      Save
+                    </Button>
+                    <button
+                      onClick={() => setEditingField(null)}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#8F9BBA] hover:text-[#1B2559] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <button
+                    onClick={() => startEdit('Timezone', timezone)}
+                    className="text-xs font-bold text-[#8F9BBA] hover:text-[#F26B21] transition-colors cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                )}
               </div>
-            )}
+            </div>
 
-            {/* Tab 4: API Endpoints */}
-            {activeTab === 'endpoints' && (
-              <div className="flex flex-col gap-6">
+            {/* Setting 3: Language */}
+            <div className="py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-[#EDE7FF] text-[#7048E8] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <Globe className="w-5 h-5" />
+                </div>
                 <div>
-                  <h3 className="text-[18px] font-bold text-navy mb-1">Service & Node Endpoints</h3>
-                  <p className="text-[13px] text-slate-500">Configure connection strings for the Facilitator micro-service and Algorand RPC nodes.</p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-navy">x402 Facilitator Service URL</label>
-                  <input
-                    type="text"
-                    value={facilitatorUrl}
-                    onChange={(e) => setFacilitatorUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-line font-mono text-[13px] text-ink focus:outline-none focus:border-blue-brand"
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-navy">Algorand Node Endpoint (Algonode)</label>
-                  <input
-                    type="text"
-                    value={algonodeUrl}
-                    onChange={(e) => setAlgonodeUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-line font-mono text-[13px] text-ink focus:outline-none focus:border-blue-brand"
-                  />
+                  <div className="text-[13.5px] font-extrabold text-[#1B2559]">Language</div>
+                  {editingField === 'Language' ? (
+                    <input
+                      type="text"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="mt-1.5 text-xs px-3 py-1.5 rounded-[12px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559] font-bold"
+                    />
+                  ) : (
+                    <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">{language}</div>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* Submit Bar */}
-            <div className="mt-8 pt-6 border-t border-line flex justify-end gap-3">
+              <div>
+                {editingField === 'Language' ? (
+                  <div className="flex items-center gap-2">
+                    <Button onClick={() => saveEdit('Language')} className="py-1.5 px-3 text-xs">
+                      Save
+                    </Button>
+                    <button
+                      onClick={() => setEditingField(null)}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#8F9BBA] hover:text-[#1B2559] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => startEdit('Language', language)}
+                    className="text-xs font-bold text-[#8F9BBA] hover:text-[#F26B21] transition-colors cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Setting 4: Theme */}
+            <div className="py-4.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-[#FFF3BF] text-[#F59F00] flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
+                  <Sun className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[13.5px] font-extrabold text-[#1B2559]">Theme</div>
+                  {editingField === 'Theme' ? (
+                    <select
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="mt-1.5 text-xs px-3 py-1.5 rounded-[12px] bg-white border border-slate-200 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559] font-bold"
+                    >
+                      <option value="Light">Light (Warm Peach Aesthetic)</option>
+                      <option value="Dark">Dark Mode</option>
+                      <option value="System">System Default</option>
+                    </select>
+                  ) : (
+                    <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">{theme}</div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                {editingField === 'Theme' ? (
+                  <div className="flex items-center gap-2">
+                    <Button onClick={() => saveEdit('Theme')} className="py-1.5 px-3 text-xs">
+                      Save
+                    </Button>
+                    <button
+                      onClick={() => setEditingField(null)}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold text-[#8F9BBA] hover:text-[#1B2559] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => startEdit('Theme', theme)}
+                    className="text-xs font-bold text-[#8F9BBA] hover:text-[#F26B21] transition-colors cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </GlassCard>
+
+        {/* ================= SECTION 2: TOGGLES IN ORANGE ================= */}
+        <GlassCard className="p-7 md:p-9 space-y-6">
+          <h2 className="text-[17px] font-extrabold text-[#1B2559] tracking-tight">
+            Mesh Automation & Privacy Toggles
+          </h2>
+
+          <div className="divide-y divide-slate-100/70">
+            {/* Toggle 1: Auto-rebalance */}
+            <div className="py-4 flex items-center justify-between">
+              <div>
+                <div className="text-[13.5px] font-extrabold text-[#1B2559]">Autonomous Deadlock Resolution</div>
+                <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">Automatically break cyclic resource dependencies across peer agents</div>
+              </div>
+
               <button
-                type="submit"
-                className="px-6 py-3 bg-blue-brand hover:bg-blue-dark text-white rounded-full text-[14px] font-bold transition-colors shadow-sm"
+                onClick={() => setAutoRebalance(!autoRebalance)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                  autoRebalance ? 'bg-[#F26B21]' : 'bg-slate-200'
+                }`}
               >
-                Save Changes
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    autoRebalance ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
               </button>
             </div>
 
-          </form>
-        </div>
+            {/* Toggle 2: Peer Discovery */}
+            <div className="py-4 flex items-center justify-between">
+              <div>
+                <div className="text-[13.5px] font-extrabold text-[#1B2559]">P2P Multi-Cast Peer Discovery</div>
+                <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">Allow nearby regional agent nodes to establish low-latency links</div>
+              </div>
+
+              <button
+                onClick={() => setPeerDiscovery(!peerDiscovery)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                  peerDiscovery ? 'bg-[#F26B21]' : 'bg-slate-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    peerDiscovery ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Toggle 3: Instant Settlement */}
+            <div className="py-4 flex items-center justify-between">
+              <div>
+                <div className="text-[13.5px] font-extrabold text-[#1B2559]">x402 Micro-Settlements</div>
+                <div className="text-xs text-[#5B6B8C] font-semibold mt-0.5">Enable immediate off-chain optimistic payment channels</div>
+              </div>
+
+              <button
+                onClick={() => setInstantSettlement(!instantSettlement)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                  instantSettlement ? 'bg-[#F26B21]' : 'bg-slate-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    instantSettlement ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </GlassCard>
 
       </div>
     </DashboardLayout>

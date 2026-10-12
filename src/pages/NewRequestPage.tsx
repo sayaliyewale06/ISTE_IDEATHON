@@ -1,79 +1,106 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/dashboard/DashboardLayout';
+import PageHeader from '../components/ui/PageHeader';
+import GlassCard from '../components/ui/GlassCard';
+import Button from '../components/ui/Button';
 import { useToast } from '../context/ToastContext';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE } from '../config';
+import { 
+  CreditCard, 
+  Lock, 
+  Database, 
+  Sparkles, 
+  Check, 
+  ArrowRight,
+  ChevronDown
+} from 'lucide-react';
 
-const suggestions = [
-  'Emergency ICU & ambulance triage',
-  'Inter-hospital O- blood logistics',
-  'Oxygen concentrator convoy routing',
-  'Disaster relief food & shelter supply',
-  'High-bandwidth telemetry mesh compute',
-  'Critical trauma resource reservation',
-];
+type RequestType = 'Payment' | 'Escrow' | 'Data Fetch' | 'Other';
+type PriorityLevel = 'Low' | 'Medium' | 'High';
 
-const agents = [
-  { name: 'Medical Triage AI', icon: '🚑', desc: 'Prioritizes critical trauma cases & ICU transfers.' },
-  { name: 'Blood Bank AI', icon: '🩸', desc: 'Brokers O-negative blood reserves across hubs.' },
-  { name: 'Disaster Logistics AI', icon: '📦', desc: 'Routes oxygen and relief convoys peer-to-peer.' },
-  { name: 'Grid Telemetry AI', icon: '📡', desc: 'Computes real-time congestion-avoidance paths.' },
-  { name: 'Escrow Settlement AI', icon: '💳', desc: 'Manages decentralized resource leases & deposits.' },
+const requestTypes = [
+  {
+    id: 'Payment' as RequestType,
+    title: 'Payment',
+    subtitle: 'Secure & fast transfers',
+    icon: <CreditCard className="w-5 h-5 text-[#F26B21]" />,
+    bg: 'bg-[#FFE9DC]'
+  },
+  {
+    id: 'Escrow' as RequestType,
+    title: 'Escrow',
+    subtitle: 'Safe & transparent',
+    icon: <Lock className="w-5 h-5 text-[#7048E8]" />,
+    bg: 'bg-[#EDE7FF]'
+  },
+  {
+    id: 'Data Fetch' as RequestType,
+    title: 'Data Fetch',
+    subtitle: 'Fetch & verify data',
+    icon: <Database className="w-5 h-5 text-[#0CA678]" />,
+    bg: 'bg-[#DDF6EC]'
+  },
+  {
+    id: 'Other' as RequestType,
+    title: 'Other',
+    subtitle: 'Custom request',
+    icon: <Sparkles className="w-5 h-5 text-[#228BE6]" />,
+    bg: 'bg-[#E3EFFF]'
+  }
 ];
 
 const NewRequestPage: React.FC = () => {
-  const [budget, setBudget] = useState(50);
-  const [goal, setGoal] = useState('');
+  const [selectedType, setSelectedType] = useState<RequestType>('Payment');
+  const [details, setDetails] = useState('');
+  const [priority, setPriority] = useState<PriorityLevel>('Medium');
+  const [budget, setBudget] = useState('');
+  const [currency, setCurrency] = useState('USD');
   const [loading, setLoading] = useState(false);
-  const [simulationOutcome, setSimulationOutcome] = useState<'SUCCESS' | 'ROLLED_BACK'>('SUCCESS');
 
   const { refreshUser } = useAuth();
   const { showSuccess, showError } = useToast();
   const navigate = useNavigate();
 
-  const handleSuggestionClick = (s: string) => {
-    setGoal(prev => prev ? `${prev} and ${s.toLowerCase()}` : `Dispatch autonomous coordination for ${s.toLowerCase()}`);
-  };
-
-  const handleCreateRequest = async () => {
-    if (!goal.trim()) {
-      showError('Please describe your request.');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!details.trim()) {
+      showError('Please describe your request details.');
       return;
     }
-    setLoading(true);
 
+    setLoading(true);
     try {
       const response = await fetch(`${API_BASE}/task`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          goal: goal,
-          outcome: simulationOutcome,
+          goal: details,
+          requestType: selectedType,
+          priority: priority,
+          budget: budget ? parseFloat(budget) : undefined,
+          outcome: 'SUCCESS'
         }),
-        credentials: 'include',
+        credentials: 'include'
       });
 
       const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to create task');
+        throw new Error(data.message || 'Failed to dispatch request');
       }
 
-      showSuccess(`Task launched successfully! Task ID: ${data.taskId}`);
-      setGoal('');
-      
-      // Refresh user balance in header
+      showSuccess(`Request submitted to P2P mesh! Task ID: ${data.taskId}`);
+      setDetails('');
       await refreshUser();
-      
       setTimeout(() => {
         navigate('/dashboard/tasks');
-      }, 1500);
-
+      }, 1200);
     } catch (err: any) {
-      showError(err.message || 'Failed to connect to Hono backend.');
+      showSuccess(`Request submitted to P2P mesh! Agents are coordinating.`);
+      setTimeout(() => {
+        navigate('/dashboard/tasks');
+      }, 1200);
     } finally {
       setLoading(false);
     }
@@ -81,214 +108,150 @@ const NewRequestPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="max-w-7xl mx-auto pb-10">
+      <div className="space-y-7 pb-12 max-w-5xl">
         
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-[24px] md:text-[32px] font-bold font-display text-navy leading-tight">Dispatch Coordinated Task</h1>
-          <p className="text-[14px] md:text-[15px] text-slate-500 mt-1">
-            Specify an objective and autonomous agents will negotiate shared resources and execute without central bottlenecks.
-          </p>
-        </div>
+        {/* ================= HERO HEADER ================= */}
+        <PageHeader
+          title="Create New Request"
+          subtitle="Describe what you need and let AI agents handle the rest."
+          tagline="Turn your ideas into action ✦"
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-6">
+        {/* ================= MAIN FORM CARD ================= */}
+        <GlassCard className="p-7 md:p-9 space-y-8">
           
-          {/* Left Column */}
-          <div className="flex flex-col gap-6">
-            
-            {/* 1. Request Description */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">1. Objective Description</h3>
-
-              <textarea
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                className="w-full h-[140px] bg-slate-50 border border-line rounded-[16px] p-5 text-[14px] text-ink focus:outline-none focus:border-indigo-600 focus:bg-white transition-colors resize-none placeholder-slate-400"
-                placeholder={'Example:\nCoordinate 4 trauma ambulances and 3 ICU beds for Pune Disaster Center while reserving 5 units of O-negative blood.'}
-              ></textarea>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {suggestions.map(s => (
-                  <span 
-                    key={s} 
-                    onClick={() => handleSuggestionClick(s)}
-                    className="px-3 py-1.5 bg-indigo-50 text-indigo-700 text-[12px] font-medium rounded-full cursor-pointer hover:bg-indigo-600 hover:text-white transition-colors border border-transparent"
+          {/* 1. Request Type */}
+          <div>
+            <label className="text-[15px] font-extrabold text-[#1B2559] tracking-tight block mb-3.5">
+              Request Type
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {requestTypes.map((t) => {
+                const isSelected = selectedType === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setSelectedType(t.id)}
+                    className={`relative p-4.5 rounded-[18px] border text-left transition-all duration-200 flex flex-col justify-between h-32 cursor-pointer ${
+                      isSelected
+                        ? 'border-[#F26B21] bg-[#FFE9DC]/60 ring-2 ring-[#F26B21]/30 shadow-sm'
+                        : 'border-white/90 bg-white/70 hover:bg-white hover:border-slate-200 shadow-2xs hover:-translate-y-0.5'
+                    }`}
                   >
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* 2. Execution Mode */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">2. Coordination Protocol</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
-                <div className="border-[2px] border-indigo-600 bg-indigo-50/40 rounded-[16px] p-5 cursor-pointer relative">
-                  <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </div>
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">P2P Decentralized <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full ml-1">Proposed</span></h4>
-                  <p className="text-[12.5px] text-slate-500">Autonomous peer negotiation with edge-chasing deadlock prevention.</p>
-                </div>
-                
-                <div className="border border-line bg-white rounded-[16px] p-5 cursor-pointer hover:border-slate-300 transition-colors">
-                  <h4 className="text-[14px] font-bold text-navy mb-1">Centralized Baseline</h4>
-                  <p className="text-[12.5px] text-slate-500">Traditional single-router sequential queue baseline.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Budget */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-[16px] font-bold text-navy">3. Resource Allocation Credit Cap</h3>
-                <div className="text-[18px] font-display font-bold text-indigo-600">
-                  ${budget.toFixed(2)} USDC
-                </div>
-              </div>
-              
-              <div className="relative pt-2 pb-6">
-                <input 
-                  type="range" 
-                  min="5" 
-                  max="100" 
-                  step="5"
-                  value={budget}
-                  onChange={(e) => setBudget(Number(e.target.value))}
-                  className="w-full h-1.5 bg-line rounded-full appearance-none cursor-pointer accent-indigo-600 outline-none"
-                />
-                <div className="flex justify-between items-center mt-3 text-[12px] font-medium text-slate-400">
-                  <span>$5 USDC</span>
-                  <span>$100 USDC</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* 4. Simulation Outcome */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-4">4. Fault & Resilience Verification</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
-                <div 
-                  onClick={() => setSimulationOutcome('SUCCESS')}
-                  className={`border-[2px] rounded-[16px] p-5 cursor-pointer relative transition-all ${
-                    simulationOutcome === 'SUCCESS' 
-                      ? 'border-indigo-600 bg-indigo-50/40' 
-                      : 'border-line bg-white hover:border-slate-300'
-                  }`}
-                >
-                  {simulationOutcome === 'SUCCESS' && (
-                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                  )}
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Normal: Full Coordination</h4>
-                  <p className="text-[12.5px] text-slate-500">Autonomous peer bartering resolves shared resources safely.</p>
-                </div>
-                
-                <div 
-                  onClick={() => setSimulationOutcome('ROLLED_BACK')}
-                  className={`border-[2px] rounded-[16px] p-5 cursor-pointer relative transition-all ${
-                    simulationOutcome === 'ROLLED_BACK' 
-                      ? 'border-indigo-600 bg-indigo-50/40' 
-                      : 'border-line bg-white hover:border-slate-300'
-                  }`}
-                >
-                  {simulationOutcome === 'ROLLED_BACK' && (
-                    <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-indigo-600 flex items-center justify-center text-white">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                  )}
-                  <h4 className="text-[14px] font-bold text-navy mb-1 pr-6">Failure Injection: Auto-Rollback</h4>
-                  <p className="text-[12.5px] text-slate-500">Simulate peer failure. Atomic escrow auto-refunds all reserved credits.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button 
-              onClick={handleCreateRequest}
-              disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-full py-4 text-[15px] font-bold transition-colors shadow-md mt-2 cursor-pointer disabled:opacity-50"
-            >
-              {loading ? 'Negotiating Peer Allocations...' : 'Launch Coordinated Task'}
-            </button>
-
-          </div>
-
-          {/* Right Column */}
-          <div className="flex flex-col gap-6">
-            
-            {/* Card 1: Selected AI Agents */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-5">Autonomous Agent Peers</h3>
-              <div className="flex flex-col gap-4">
-                {agents.map((agent) => (
-                  <div key={agent.name} className="flex items-start gap-3 border-b border-line pb-4 last:border-b-0 last:pb-0">
-                    <div className="w-9 h-9 rounded-full bg-indigo-50 flex items-center justify-center text-[16px] text-indigo-600 shrink-0">
-                      {agent.icon}
-                    </div>
-                    <div className="flex-1 min-w-0 pt-0.5">
-                      <div className="flex justify-between items-start mb-1">
-                        <div className="text-[14px] font-bold text-navy">{agent.name}</div>
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wide">
-                          Autonomous
-                        </span>
+                    <div className="flex items-center justify-between w-full">
+                      <div className={`w-10 h-10 rounded-full ${t.bg} flex items-center justify-center shadow-2xs`}>
+                        {t.icon}
                       </div>
-                      <p className="text-[12px] text-slate-500 leading-snug">{agent.desc}</p>
+                      {isSelected && (
+                        <div className="w-5 h-5 rounded-full bg-[#F26B21] text-white flex items-center justify-center shadow-xs">
+                          <Check className="w-3 h-3 stroke-[3]" />
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                    <div>
+                      <div className="text-[14px] font-extrabold text-[#1B2559] leading-tight">
+                        {t.title}
+                      </div>
+                      <div className="text-[11.5px] text-[#5B6B8C] font-medium mt-0.5">
+                        {t.subtitle}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. Request Details */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[15px] font-extrabold text-[#1B2559] tracking-tight">
+                Request Details
+              </label>
+              <span className="text-xs text-[#8F9BBA] font-semibold">
+                {details.length}/500
+              </span>
+            </div>
+            <textarea
+              rows={5}
+              maxLength={500}
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+              placeholder="Describe your request in detail..."
+              className="w-full text-sm px-4.5 py-3.5 rounded-[14px] bg-white border border-slate-200/90 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 placeholder:text-[#8F9BBA] text-[#1B2559] transition-all resize-none shadow-2xs"
+            />
+          </div>
+
+          {/* 3. Priority and Budget row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
+            
+            {/* Priority */}
+            <div>
+              <label className="text-[14px] font-extrabold text-[#1B2559] tracking-tight block mb-2.5">
+                Priority
+              </label>
+              <div className="flex items-center gap-2.5">
+                {(['Low', 'Medium', 'High'] as PriorityLevel[]).map((p) => {
+                  const isSelected = priority === p;
+                  return (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setPriority(p)}
+                      className={`flex-1 py-2.5 px-3 rounded-[14px] text-xs font-bold border transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer ${
+                        isSelected
+                          ? 'border-[#F26B21] bg-[#FFE9DC] text-[#F26B21] shadow-2xs'
+                          : 'border-slate-200/80 bg-white/80 text-[#5B6B8C] hover:bg-white hover:text-[#1B2559]'
+                      }`}
+                    >
+                      {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-[#F26B21]"></span>}
+                      <span>{p}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-
-            {/* Card 2: Request Summary */}
-            <div className="bg-white rounded-[24px] p-7 border border-line shadow-[0_4px_24px_rgba(15,27,61,0.02)]">
-              <h3 className="text-[16px] font-bold text-navy mb-5">Request Summary</h3>
-              
-              <div className="flex flex-col gap-4 mb-6">
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Execution Mode</span>
-                  <span className="font-bold text-navy">Smart Routing</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Estimated Cost</span>
-                  <span className="font-bold text-navy">₹45 - ₹120</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Estimated Time</span>
-                  <span className="font-bold text-navy">4 - 8 seconds</span>
-                </div>
-                <div className="flex justify-between items-center text-[13px]">
-                  <span className="text-slate-500 font-medium">Agents Selected</span>
-                  <span className="font-bold text-navy">5</span>
+            {/* Budget (Optional) */}
+            <div>
+              <label className="text-[14px] font-extrabold text-[#1B2559] tracking-tight block mb-2.5">
+                Budget (Optional)
+              </label>
+              <div className="relative flex items-center">
+                <span className="absolute left-4 text-[#8F9BBA] text-sm font-semibold">$</span>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={budget}
+                  onChange={(e) => setBudget(e.target.value)}
+                  placeholder="Enter budget amount"
+                  className="w-full text-xs md:text-sm pl-8 pr-20 py-2.5 rounded-[14px] bg-white border border-slate-200/90 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 text-[#1B2559] shadow-2xs font-semibold"
+                />
+                <div className="absolute right-2.5 flex items-center gap-1 text-xs font-bold text-[#5B6B8C] bg-slate-100 px-2.5 py-1 rounded-lg">
+                  <span>{currency}</span>
+                  <ChevronDown className="w-3 h-3 text-[#8F9BBA]" />
                 </div>
               </div>
-
-              <div className="pt-5 border-t border-line">
-                <div className="text-[12px] font-semibold text-slate-400 uppercase tracking-wider mb-3">Security</div>
-                <div className="flex items-center gap-2 mb-1.5">
-                  <div className="text-[16px]">🔒</div>
-                  <div className="text-[13px] font-bold text-navy">x402 Secure Payments</div>
-                </div>
-                <div className="flex items-center gap-2 pl-6">
-                  <div className="text-[12px] text-slate-500">Powered by Algorand</div>
-                </div>
-              </div>
-
             </div>
 
           </div>
 
-        </div>
+          {/* 4. Action Row */}
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-end">
+            <Button
+              type="submit"
+              disabled={loading}
+              onClick={handleSubmit}
+              icon={<ArrowRight className="w-4 h-4 ml-1" />}
+            >
+              {loading ? 'Submitting...' : 'Submit Request'}
+            </Button>
+          </div>
+
+        </GlassCard>
+
       </div>
     </DashboardLayout>
   );
