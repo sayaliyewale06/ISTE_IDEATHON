@@ -110,10 +110,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         />
       )}
 
-      {/* Fixed Left Sidebar ~280px wide */}
+      {/* Fixed Left Sidebar (~320-340px on desktop) */}
       <aside className={`
         fixed lg:sticky top-0 left-0 h-screen z-50
-        w-[280px] flex-shrink-0
+        w-[280px] lg:w-[320px] xl:w-[340px] flex-shrink-0
         bg-[#FFFDFB]/95 backdrop-blur-md
         border-r border-orange-100/60
         flex flex-col justify-between py-6 px-4

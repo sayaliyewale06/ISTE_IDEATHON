@@ -47,7 +47,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-7 pb-12 max-w-5xl">
+      <div className="w-full max-w-[1400px] mx-auto space-y-7 pb-12 box-border">
         
         {/* ================= HERO HEADER ================= */}
         <PageHeader
@@ -57,7 +57,7 @@ const SettingsPage: React.FC = () => {
         />
 
         {/* ================= SUB-TABS ROW ================= */}
-        <div className="flex items-center gap-6 border-b border-orange-100/70 text-xs font-bold overflow-x-auto">
+        <div className="flex items-center gap-6 border-b border-orange-100/70 text-xs font-bold overflow-x-auto w-full">
           {(['General', 'Network', 'Agents', 'Notifications', 'Security'] as const).map((tab) => {
             const isSelected = activeTab === tab;
             return (
@@ -77,7 +77,7 @@ const SettingsPage: React.FC = () => {
         </div>
 
         {/* ================= SECTION 1: GENERAL SETTINGS GLASS CARD ================= */}
-        <GlassCard className="p-7 md:p-9 space-y-6">
+        <GlassCard className="p-7 md:p-9 space-y-6 w-full box-border">
           <div className="flex items-center justify-between">
             <h2 className="text-[17px] font-extrabold text-[#1B2559] tracking-tight">
               General Configuration
@@ -274,7 +274,7 @@ const SettingsPage: React.FC = () => {
         </GlassCard>
 
         {/* ================= SECTION 2: TOGGLES IN ORANGE ================= */}
-        <GlassCard className="p-7 md:p-9 space-y-6">
+        <GlassCard className="p-7 md:p-9 space-y-6 w-full box-border">
           <h2 className="text-[17px] font-extrabold text-[#1B2559] tracking-tight">
             Mesh Automation & Privacy Toggles
           </h2>

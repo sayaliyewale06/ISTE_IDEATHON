@@ -38,9 +38,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 relative z-10">
+      <div className="flex-1 flex flex-col min-w-0 relative z-10 overflow-x-hidden">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 p-5 md:p-8 lg:p-9 overflow-auto max-w-[1440px] mx-auto w-full">
+        <main className="flex-1 w-full max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-10 py-6 md:py-8 box-border overflow-x-hidden">
           {children}
         </main>
       </div>

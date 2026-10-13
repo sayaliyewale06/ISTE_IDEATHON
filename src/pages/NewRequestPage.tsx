@@ -108,7 +108,7 @@ const NewRequestPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-7 pb-12 max-w-5xl">
+      <div className="w-full max-w-[1400px] mx-auto space-y-7 pb-12 box-border">
         
         {/* ================= HERO HEADER ================= */}
         <PageHeader
@@ -118,14 +118,14 @@ const NewRequestPage: React.FC = () => {
         />
 
         {/* ================= MAIN FORM CARD ================= */}
-        <GlassCard className="p-7 md:p-9 space-y-8">
+        <GlassCard className="p-7 md:p-9 space-y-8 w-full box-border">
           
           {/* 1. Request Type */}
           <div>
             <label className="text-[15px] font-extrabold text-[#1B2559] tracking-tight block mb-3.5">
               Request Type
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
               {requestTypes.map((t) => {
                 const isSelected = selectedType === t.id;
                 return (
@@ -133,7 +133,7 @@ const NewRequestPage: React.FC = () => {
                     key={t.id}
                     type="button"
                     onClick={() => setSelectedType(t.id)}
-                    className={`relative p-4.5 rounded-[18px] border text-left transition-all duration-200 flex flex-col justify-between h-32 cursor-pointer ${
+                    className={`relative p-4.5 rounded-[18px] border text-left transition-all duration-200 flex flex-col justify-between h-32 cursor-pointer box-border ${
                       isSelected
                         ? 'border-[#F26B21] bg-[#FFE9DC]/60 ring-2 ring-[#F26B21]/30 shadow-sm'
                         : 'border-white/90 bg-white/70 hover:bg-white hover:border-slate-200 shadow-2xs hover:-translate-y-0.5'
@@ -179,7 +179,7 @@ const NewRequestPage: React.FC = () => {
               value={details}
               onChange={(e) => setDetails(e.target.value)}
               placeholder="Describe your request in detail..."
-              className="w-full text-sm px-4.5 py-3.5 rounded-[14px] bg-white border border-slate-200/90 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 placeholder:text-[#8F9BBA] text-[#1B2559] transition-all resize-none shadow-2xs"
+              className="w-full text-sm px-4.5 py-3.5 rounded-[14px] bg-white border border-slate-200/90 focus:outline-hidden focus:border-[#F26B21] focus:ring-3 focus:ring-[#F26B21]/15 placeholder:text-[#8F9BBA] text-[#1B2559] transition-all resize-none shadow-2xs box-border"
             />
           </div>
 
