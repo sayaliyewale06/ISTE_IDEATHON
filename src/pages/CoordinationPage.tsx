@@ -13,12 +13,6 @@ import {
   ShieldCheck, 
   Plus, 
   ChevronDown, 
-  Cpu,
-  HeartHandshake,
-  Truck,
-  CircleDollarSign,
-  Search,
-  Headphones,
   RotateCcw
 } from 'lucide-react';
 

@@ -12,8 +12,7 @@ import {
   AlertTriangle, 
   Plus, 
   Clock, 
-  ShieldCheck,
-  ArrowRight
+  ShieldCheck
 } from 'lucide-react';
 
 interface EscrowItem {

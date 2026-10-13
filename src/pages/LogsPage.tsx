@@ -5,9 +5,7 @@ import GlassCard from '../components/ui/GlassCard';
 import Badge from '../components/ui/Badge';
 import { 
   ChevronRight,
-  Clock,
-  Terminal,
-  Activity
+  Clock
 } from 'lucide-react';
 
 interface LogItem {

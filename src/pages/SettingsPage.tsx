@@ -8,12 +8,7 @@ import {
   Network, 
   Clock, 
   Globe, 
-  Sun, 
-  ShieldCheck, 
-  Bell, 
-  Sliders, 
-  Check, 
-  Save
+  Sun
 } from 'lucide-react';
 
 const SettingsPage: React.FC = () => {
@@ -30,7 +25,6 @@ const SettingsPage: React.FC = () => {
   const [autoRebalance, setAutoRebalance] = useState(true);
   const [peerDiscovery, setPeerDiscovery] = useState(true);
   const [instantSettlement, setInstantSettlement] = useState(true);
-  const [emailAlerts, setEmailAlerts] = useState(false);
 
   // Editing state
   const [editingField, setEditingField] = useState<string | null>(null);

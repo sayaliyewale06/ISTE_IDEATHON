@@ -56,7 +56,7 @@ const NewRequestPage: React.FC = () => {
   const [details, setDetails] = useState('');
   const [priority, setPriority] = useState<PriorityLevel>('Medium');
   const [budget, setBudget] = useState('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency] = useState('USD');
   const [loading, setLoading] = useState(false);
 
   const { refreshUser } = useAuth();

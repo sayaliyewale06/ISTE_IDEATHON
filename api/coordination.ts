@@ -161,10 +161,11 @@ export default async function handler(req: any, res: any) {
     meshState = getInitialState();
   }
 
-  const urlPath = req.url || '';
+  const queryStr = req.query ? JSON.stringify(req.query) : '';
+  const urlPath = `${req.url || ''} ${queryStr}`;
 
   // 1. Benchmark (Returns Array matching Frontend expectations)
-  if (urlPath.includes('/benchmark')) {
+  if (urlPath.includes('benchmark')) {
     return res.status(200).json({
       success: true,
       comparison: [
@@ -209,7 +210,7 @@ export default async function handler(req: any, res: any) {
   }
 
   // 2. Scenario: Deadlock
-  if (urlPath.includes('/scenario/deadlock')) {
+  if (urlPath.includes('deadlock') && !urlPath.includes('resolve')) {
     meshState.deadlocks = [
       {
         cycle: ['agent-triage', 'agent-bloodbank', 'agent-logistics'],
@@ -241,7 +242,7 @@ export default async function handler(req: any, res: any) {
   }
 
   // 3. Resolve deadlock
-  if (urlPath.includes('/resolve-deadlock')) {
+  if (urlPath.includes('resolve-deadlock') || (urlPath.includes('resolve') && urlPath.includes('deadlock'))) {
     meshState.deadlocks = meshState.deadlocks.map((d: any) => ({
       ...d,
       resolved: true,
@@ -264,7 +265,7 @@ export default async function handler(req: any, res: any) {
   }
 
   // 4. Fault inject
-  if (urlPath.includes('/fault/inject')) {
+  if (urlPath.includes('fault/inject') || urlPath.includes('inject')) {
     const { agentId } = req.body || {};
     meshState.agents = meshState.agents.map((a: any) => a.id === agentId ? { ...a, status: 'FAILED' } : a);
     meshState.logs.unshift({
@@ -279,7 +280,7 @@ export default async function handler(req: any, res: any) {
   }
 
   // 5. Fault recover
-  if (urlPath.includes('/fault/recover')) {
+  if (urlPath.includes('fault/recover') || urlPath.includes('recover')) {
     const { agentId } = req.body || {};
     meshState.agents = meshState.agents.map((a: any) => a.id === agentId ? { ...a, status: 'IDLE' } : a);
     meshState.logs.unshift({
