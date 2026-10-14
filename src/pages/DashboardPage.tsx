@@ -325,6 +325,30 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
 
+        {/* ================= PS FOCUS: AUTONOMOUS AGENT MESH & DEADLOCK BANNER ================= */}
+        <div className="p-4 sm:p-5 rounded-[22px] bg-gradient-to-r from-[#FFF5EE] via-[#FFF9F5] to-[#EDE7FF] border border-[#F26B21]/20 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-2.5 py-0.5 bg-[#FFE9DC] text-[#F26B21] border border-[#F26B21]/20 rounded-full text-[10.5px] font-extrabold uppercase tracking-wider">
+                PS 2: Agentic AI & Autonomous Systems
+              </span>
+              <span className="text-[11px] text-[#5B6B8C] font-semibold">Chandy-Misra-Haas Deadlock Detection &amp; Invariant Safety</span>
+            </div>
+            <h2 className="text-base sm:text-lg font-extrabold text-[#1B2559] tracking-tight">
+              Coordination Without Central Control: Autonomous Agent Resilience
+            </h2>
+            <p className="text-xs text-[#5B6B8C] max-w-3xl leading-relaxed">
+              Equipped with distributed bilateral negotiation, real-time edge-chasing cycle detection (&lt;180ms), fault injection suites, and quantitative benchmark against centralized baselines.
+            </p>
+          </div>
+          <Link
+            to="/dashboard/coordination"
+            className="w-full sm:w-auto text-center px-4.5 py-2.5 bg-gradient-to-r from-[#FF8A4C] to-[#F26B21] hover:from-[#FF7E36] hover:to-[#E25C14] text-white font-bold text-xs rounded-xl shadow-[0_4px_14px_rgba(242,107,33,0.3)] transition-all shrink-0 flex items-center justify-center gap-2 hover:-translate-y-0.5"
+          >
+            <span>Launch P2P Framework →</span>
+          </Link>
+        </div>
+
         {/* ================= ROW 3: 3-COLUMN SECTION ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           
